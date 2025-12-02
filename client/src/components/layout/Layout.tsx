@@ -13,7 +13,8 @@ import {
   X,
   Settings,
   Search,
-  ChevronRight
+  ChevronRight,
+  CheckSquare
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -51,6 +52,7 @@ export function Layout({ children }: LayoutProps) {
     { path: '/documents', label: t('nav.documents'), icon: FileText },
     { path: '/writing', label: t('nav.writing'), icon: Pencil },
     { path: '/learning', label: t('nav.learning'), icon: BookOpen },
+    { path: '/tasks', label: t('tasks.title'), icon: CheckSquare },
     { path: '/settings', label: t('nav.settings'), icon: Settings },
   ];
 

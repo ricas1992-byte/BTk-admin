@@ -11,9 +11,13 @@ import {
   AlertCircle,
   Plus,
   Pencil,
-  TrendingUp
+  TrendingUp,
+  Calendar,
+  ArrowRight,
+  Flag
 } from 'lucide-react';
 import { Link } from 'wouter';
+import { useMemo } from 'react';
 
 function TaskItem({ task }: { task: Task }) {
   const { t, updateTask } = useApp();
@@ -69,13 +73,40 @@ function TaskItem({ task }: { task: Task }) {
 export default function Dashboard() {
   const { t, documents, courses, tasks, learningProgress } = useApp();
 
-  const todayTasks = tasks.filter(task => {
+  const todayTasks = useMemo(() => tasks.filter(task => {
     if (task.status === 'DONE') return false;
     if (!task.dueDate) return true;
     const today = new Date().toDateString();
     const taskDate = new Date(task.dueDate).toDateString();
     return taskDate === today || new Date(task.dueDate) < new Date();
-  });
+  }), [tasks]);
+
+  const upcomingTasks = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const weekEnd = new Date(today);
+    weekEnd.setDate(weekEnd.getDate() + 7);
+    
+    return tasks
+      .filter(task => {
+        if (task.status === 'DONE') return false;
+        if (!task.dueDate) return false;
+        const taskDate = new Date(task.dueDate);
+        return taskDate > today && taskDate <= weekEnd;
+      })
+      .sort((a, b) => new Date(a.dueDate!).getTime() - new Date(b.dueDate!).getTime())
+      .slice(0, 5);
+  }, [tasks]);
+
+  const overdueTasks = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return tasks.filter(task => {
+      if (task.status === 'DONE') return false;
+      if (!task.dueDate) return false;
+      return new Date(task.dueDate) < today;
+    }).length;
+  }, [tasks]);
 
   const openTasks = tasks.filter(t => t.status !== 'DONE').length;
   const inProgressTasks = tasks.filter(t => t.status === 'IN_PROGRESS').length;
@@ -182,10 +213,24 @@ export default function Dashboard() {
         {/* Today's Tasks */}
         <Card className="shadow-card rounded-card" data-testid="card-today-tasks">
           <CardHeader className="flex flex-row items-center justify-between gap-2">
-            <CardTitle className="text-lg">{t('dashboard.todayTasks')}</CardTitle>
-            <Badge variant="secondary" className="rounded-full px-3">
-              {todayTasks.length}
-            </Badge>
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-lg">{t('dashboard.todayTasks')}</CardTitle>
+              <Badge variant="secondary" className="rounded-full px-3">
+                {todayTasks.length}
+              </Badge>
+              {overdueTasks > 0 && (
+                <Badge variant="destructive" className="rounded-full px-2">
+                  <Flag className="h-3 w-3 me-1" />
+                  {overdueTasks} {t('tasks.overdue')}
+                </Badge>
+              )}
+            </div>
+            <Link href="/tasks">
+              <Button variant="ghost" size="sm" className="touch-target" data-testid="button-view-all-tasks">
+                {t('dashboard.viewAllTasks')}
+                <ArrowRight className="h-4 w-4 ms-1" />
+              </Button>
+            </Link>
           </CardHeader>
           <CardContent>
             {todayTasks.length === 0 ? (
@@ -198,6 +243,13 @@ export default function Dashboard() {
                 {todayTasks.slice(0, 5).map(task => (
                   <TaskItem key={task.id} task={task} />
                 ))}
+                {todayTasks.length > 5 && (
+                  <Link href="/tasks?tab=today">
+                    <Button variant="outline" size="sm" className="w-full">
+                      {t('dashboard.viewAllTasks')} ({todayTasks.length})
+                    </Button>
+                  </Link>
+                )}
               </div>
             )}
           </CardContent>
@@ -255,6 +307,56 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Upcoming Tasks This Week */}
+      {upcomingTasks.length > 0 && (
+        <Card className="shadow-card rounded-card" data-testid="card-upcoming-tasks">
+          <CardHeader className="flex flex-row items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-lg">{t('dashboard.upcomingTasks')}</CardTitle>
+              <Badge variant="outline" className="rounded-full px-3">
+                <Calendar className="h-3 w-3 me-1" />
+                {t('tasks.week')}
+              </Badge>
+            </div>
+            <Link href="/tasks?tab=week">
+              <Button variant="ghost" size="sm" className="touch-target">
+                {t('dashboard.viewAllTasks')}
+                <ArrowRight className="h-4 w-4 ms-1" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {upcomingTasks.map(task => (
+                <div 
+                  key={task.id}
+                  className="flex items-center gap-3 p-3 rounded-card bg-muted/40 hover:bg-muted/70 transition-all duration-150 cursor-pointer touch-target"
+                  data-testid={`upcoming-task-${task.id}`}
+                >
+                  <div className={`p-2 rounded-full ${
+                    task.priority === 'HIGH' ? 'bg-pastel-rose' : 'bg-pastel-beige'
+                  }`}>
+                    {task.priority === 'HIGH' ? (
+                      <Flag className="h-3.5 w-3.5 text-primary" strokeWidth={1.75} />
+                    ) : (
+                      <Calendar className="h-3.5 w-3.5 text-primary" strokeWidth={1.75} />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate text-sm">{task.title}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(task.dueDate!).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Work Journal Summary */}
       <Card className="shadow-card rounded-card" data-testid="card-work-journal">
