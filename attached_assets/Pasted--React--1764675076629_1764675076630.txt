@@ -1,0 +1,119 @@
+עדכן את מערכת ה-React כך שיהיה לה סנכרון מלא בין מכשירים, בנוסף לשמירה המקומית. 
+המערכת כולה צריכה להישאר כפי שהיא, ורק להוסיף שכבת סנכרון חכמה.
+
+ההנחיה: הוסף Firebase Firestore למערכת בצורה הבאה:
+
+====================================================
+1. התקנת Firebase
+====================================================
+הרץ בטרמינל:
+npm install firebase
+
+====================================================
+2. צור קובץ הגדרות Firebase
+====================================================
+צור קובץ חדש:
+src/firebaseConfig.js
+
+תוכן קובץ (השאר placeholders שאמלא לבד בקונסול Firebase):
+
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey: "XXX",
+  authDomain: "XXX",
+  projectId: "XXX",
+  storageBucket: "XXX",
+  messagingSenderId: "XXX",
+  appId: "XXX"
+};
+
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
+
+====================================================
+3. עדכון AppContext – שילוב Firestore
+====================================================
+בקובץ:
+src/context/AppContext.jsx
+
+הוסף:
+import { db } from "../firebaseConfig";
+import { 
+  collection, addDoc, setDoc, doc, onSnapshot 
+} from "firebase/firestore";
+
+עדכן את מבנה ה-Context כך:
+
+- הנתונים עדיין ייטענו מ-localStorage כרגיל.
+- בכל שינוי ב-documents, courses, tasks, learningProgress:
+  1. שמור ב-localStorage.
+  2. בצע סנכרון ל-Firestore.
+- בעת עליית האפליקציה:
+  1. טען מה-Firestore.
+  2. כתוב מעל הנתונים המקומיים.
+  3. המשך תפעול רגיל.
+
+הוסף 4 פונקציות חדשות:
+
+async function syncCollectionToFirestore(collName, dataArray) {
+  const colRef = collection(db, collName);
+  for (const item of dataArray) {
+    await setDoc(doc(db, collName, item.id), item, { merge: true });
+  }
+}
+
+function subscribeToFirestore(collName, setter) {
+  const colRef = collection(db, collName);
+  onSnapshot(colRef, (snapshot) => {
+    const items = snapshot.docs.map(doc => doc.data());
+    setter(items);
+  });
+}
+
+קרא לפונקציה syncCollectionToFirestore בכל פעם שמתבצע שינוי:
+
+addDocument → אחרי localStorage → syncCollectionToFirestore("documents", documents);
+updateDocument → אותו דבר
+deleteDocument → מחק מקומית ואז syncCollectionToFirestore
+
+כנ"ל:
+syncCollectionToFirestore("courses", courses);
+syncCollectionToFirestore("tasks", tasks);
+syncCollectionToFirestore("learning", learningProgress);
+
+בעת עליית האפליקציה:
+subscribeToFirestore("documents", setDocuments);
+subscribeToFirestore("courses", setCourses);
+subscribeToFirestore("tasks", setTasks);
+subscribeToFirestore("learning", setLearningProgress);
+
+====================================================
+4. שמירה על backwards compatibility
+====================================================
+אל תמחק שום לוגיקה של localStorage. 
+היא נשארת מקור האמת המיידי.
+Firebase הוא רק:
+- גיבוי
+- סנכרון בין מכשירים
+- שחזור במקרה שמכשיר אבד
+
+====================================================
+5. התנהגות נדרשת
+====================================================
+אחרי העדכון:
+- כל מסמך שנוצר → נשמר מקומית + תוך שנייה מסתנכרן לענן.
+- כל מכשיר אחר שנכנס → יקבל את כל המסמכים מה-Firebase.
+- שינוי באייפון → יופיע באייפד.
+- שינוי באייפד → יופיע באייפון.
+- אין שינוי במסך, אין שינוי בעורך, אין שינוי בכתיבה.
+
+====================================================
+6. חשוב:
+====================================================
+המערכת לא משתנה ויזואלית.
+ממשק המשתמש נשאר זהה לחלוטין.
+השינוי היחיד: סנכרון אוטומטי בין מכשירים.
+
+הוסף את כל זה בצורה נקייה, ללא שבירה של קוד קיים.
