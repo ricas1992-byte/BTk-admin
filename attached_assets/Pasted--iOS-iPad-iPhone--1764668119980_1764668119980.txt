@@ -1,0 +1,322 @@
+אתה מתכנת בכיר. בנה עבורי מערכת ווב מלאה, רספונסיבית, מותאמת ל־iOS (iPad/iPhone) ומשתמש יחיד, בהתאם לאיפיון הבא. 
+חשוב: 
+- ממשק ברירת־המחדל בעברית (RTL), עם תמיכה מלאה בשפות נוספות (לפחות אנגלית LTR).
+- כל המערכת חייבת לעבוד מקומית ללא שרת (Static Frontend), עם שמירה מלאה ב־LocalStorage.
+- יש לשלב את לוגו "Beyond the Keys" שסיפקתי: הלוגו בצבעי כחול כהה וזהב, עם מקלדת וגרף עולה. 
+  הוראות: 
+  1. שים את הלוגו בתיקייה /public/logo.png 
+  2. הצג אותו בראש ה־Sidebar וב־Header.
+
+========================================================
+1. יצירת פרויקט
+========================================================
+צור Repl חדש מסוג React + Vite (או Node.js ואז הוסף פרויקט React עם Vite).
+
+הרץ:
+- npm install
+- npm run dev
+
+מבנה תיקיות נדרש (נא ליצור בדיוק כך):
+
+project-root/
+  public/
+    logo.png   ← הלוגו שסיפקתי
+  src/
+    main.jsx
+    App.jsx
+    i18n/
+      index.js
+      he.json
+      en.json
+    context/
+      AppContext.jsx
+    hooks/
+      useLocalStorage.js
+    styles/
+      global.css
+    components/
+      layout/
+        Layout.jsx
+        Sidebar.jsx
+        Header.jsx
+      common/
+        Button.jsx
+        Card.jsx
+        Input.jsx
+        TextArea.jsx
+        TagList.jsx
+      dashboard/
+        DashboardPage.jsx
+      documents/
+        DocumentsPage.jsx
+        DocumentList.jsx
+        DocumentForm.jsx
+      writing/
+        WritingStudioPage.jsx
+      learning/
+        LearningHubPage.jsx
+        CourseView.jsx
+        UnitView.jsx
+
+========================================================
+2. תמיכה בשפות (i18n)
+========================================================
+השפה הראשית: עברית (RTL). 
+פורמט i18n:
+
+he.json:
+{
+  "app.title": "מערכת ניהול Beyond the Keys",
+  "nav.dashboard": "לוח בקרה",
+  "nav.documents": "מסמכים",
+  "nav.writing": "כתיבה",
+  "nav.learning": "למידה",
+  "nav.language": "שפה",
+  "button.save": "שמור",
+  "button.create": "צור",
+  "button.delete": "מחק",
+  "button.edit": "ערוך",
+  "button.export": "ייצוא",
+  "status.open": "פתוחה",
+  "status.in_progress": "בתהליך",
+  "status.done": "הושלמה"
+}
+
+en.json:
+{
+  "app.title": "BTK Management System",
+  "nav.dashboard": "Dashboard",
+  "nav.documents": "Documents",
+  "nav.writing": "Writing",
+  "nav.learning": "Learning",
+  "nav.language": "Language",
+  "button.save": "Save",
+  "button.create": "Create",
+  "button.delete": "Delete",
+  "button.edit": "Edit",
+  "button.export": "Export",
+  "status.open": "Open",
+  "status.in_progress": "In Progress",
+  "status.done": "Done"
+}
+
+בקובץ i18n/index.js:
+- ייבא את he.json ו־en.json
+- צור פונקציה t(key) שמחזירה ערך לפי uiLanguage מתוך AppContext.
+- אם השפה he → הוסף ל־<html> את dir="rtl" + class="rtl"
+- אם en → dir="ltr" + class="ltr"
+
+========================================================
+3. עיצוב מלא (UI/UX) – כולל לוגו
+========================================================
+
+בקובץ global.css הוסף:
+
+:root {
+  --color-bg-dark: #0B1220;
+  --color-bg-light: #FFFFFF;
+  --color-accent: #D4AF37;
+  --color-accent-hover: #b9972f;
+  --color-text-main: #111827;
+  --color-text-muted: #6B7280;
+  --sidebar-width: 260px;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg-dark);
+  font-family: system-ui, -apple-system, "Segoe UI", Arial;
+}
+
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: #0F162A;
+  height: 100vh;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sidebar-logo {
+  width: 140px;
+  margin: 0 auto 20px auto;
+  display: block;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 0;
+  display: block;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+header.app-header {
+  width: 100%;
+  padding: 12px 20px;
+  background-color: #111827;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header.app-header img {
+  height: 40px;
+}
+
+button.primary {
+  background-color: var(--color-accent);
+  padding: 8px 18px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  color: black;
+  font-weight: bold;
+}
+
+button.primary:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.card {
+  background-color: var(--color-bg-light);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+========================================================
+4. Sidebar.jsx – כולל שימוש בלוגו
+========================================================
+ייבא את הלוגו public/logo.png והצג אותו בראש הצד:
+<img src="/logo.png" className="sidebar-logo" />
+
+========================================================
+5. מבנה נתונים (Models)
+========================================================
+
+Document:
+{
+  id: string,
+  title: string,
+  type: "BOOK" | "COURSE" | "DRAFT" | "STUDY" | "FOUNDATION" | "PROMPT" | "NOTE",
+  language: "he" | "en",
+  tags: string[],
+  content: string,
+  createdAt: string,
+  updatedAt: string
+}
+
+Course:
+{
+  id: string,
+  documentId: string,
+  title: string,
+  units: Unit[]
+}
+
+Unit:
+{
+  id: string,
+  title: string,
+  body: string
+}
+
+Task:
+{
+  id: string,
+  title: string,
+  type: "WRITING" | "TRANSLATION" | "LEARNING" | "TECH",
+  status: "OPEN" | "IN_PROGRESS" | "DONE",
+  dueDate?: string
+}
+
+LearningProgress:
+{
+  courseId: string,
+  completedUnits: string[]
+}
+
+========================================================
+6. AppContext – ליבת המערכת
+========================================================
+כל המצב (State) מנוהל ב־Context אחד:
+
+- documents
+- courses
+- tasks
+- learningProgress
+- uiLanguage ("he" כברירת מחדל)
+
+יצירת פונקציות:
+- addDocument, updateDocument, deleteDocument
+- addCourse, updateCourse
+- addTask, updateTask
+- updateLearningProgress
+- setUiLanguage
+
+שמור/טען מ־LocalStorage במפתחות:
+- btk_documents
+- btk_courses
+- btk_tasks
+- btk_learning
+- btk_language
+
+========================================================
+7. מסכים
+========================================================
+
+1. DashboardPage:
+   - תיבת "משימות היום"
+   - תיבת "מצב כתיבה"
+   - תיבת "יומן עבודה"
+
+2. DocumentsPage:
+   - רשימת מסמכים
+   - כפתור יצירת מסמך חדש
+   - מסנן לפי סוג/שפה/תגיות
+   - כפתור פתיחה לעריכה
+
+3. WritingStudioPage:
+   - עורך טקסט מלא (textarea בשלב ראשון)
+   - שדות: כותרת, סוג, שפה, תגים
+   - שמירה אוטומטית
+   - שמירה ידנית
+   - ייצוא JSON
+
+4. LearningHubPage:
+   - רשימת קורסים
+   - סטטוס התקדמות
+   - פתיחת קורס למסך CourseView
+
+5. CourseView:
+   - רשימת יחידות
+   - כפתור "הקראה" באמצעות SpeechSynthesis API
+
+========================================================
+8. התאמה מלאה ל־iOS
+========================================================
+- עיצוב רספונסיבי (CSS flex).
+- כפתורים גדולים למסך מגע.
+- ללא ספריות כבדות.
+- שמירה מקומית בלבד.
+
+========================================================
+9. מטרה
+========================================================
+לאחר הפעלת הפרויקט – חייבת להיות מערכת מלאה, עם ניווט בין כל המסכים, לוגו מופיע, RTL בעברית, תמיכה באנגלית, מסמכים נשמרים מקומית, קורסים עובדים, הקראה פועלת, ללא תקלות.
+
+בצע את כל השלבים עד הסוף.
