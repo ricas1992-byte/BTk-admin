@@ -1,19 +1,20 @@
 # Beyond the Keys - Management System
 
 ## Overview
-A comprehensive bilingual (Hebrew RTL / English LTR) management platform for documents, writing, learning, and task management. Designed for iOS/iPad/iPhone with full offline support via LocalStorage.
+A comprehensive multilingual management platform for documents, writing, learning, and task management. Designed for iOS/iPad/iPhone with full offline support via LocalStorage.
 
 ## Current State
-- **Status**: MVP Complete
-- **Languages**: Hebrew (default, RTL), English (LTR)
+- **Status**: MVP Complete with Advanced Features
+- **Languages**: 6 languages supported - Hebrew (default, RTL), Arabic (RTL), English, Russian, Spanish, French (all LTR)
 - **Storage**: LocalStorage only (no server required)
 
 ## Features
 1. **Dashboard** - Overview of tasks, documents, and learning progress
 2. **Documents** - Create, edit, filter, and manage documents by type/language/tags
-3. **Writing Studio** - Full-featured editor with auto-save and JSON export
-4. **Learning Hub** - Course management with unit tracking and text-to-speech
-5. **Internationalization** - Complete Hebrew/English support with RTL/LTR switching
+3. **Writing Studio** - Full-featured TipTap rich text editor with formatting (bold, italic, underline, headings, lists, alignment, code blocks), auto-save and JSON export
+4. **Learning Hub** - Course management with unit tracking, text-to-speech, and advanced analytics with visual charts
+5. **Settings** - Data backup system (export/import/clear) with validation
+6. **Internationalization** - Complete 6-language support with proper RTL/LTR direction handling
 
 ## Tech Stack
 - React + Vite + TypeScript
@@ -67,6 +68,9 @@ npm run dev
 
 ## Recent Changes
 - Initial MVP implementation with all core features
-- Full bilingual support (Hebrew/English)
+- Full 6-language support (Hebrew, English, Russian, Arabic, Spanish, French)
 - LocalStorage persistence for offline use
 - iOS-optimized responsive design
+- TipTap rich text editor with full formatting capabilities
+- Learning Analytics with visual progress charts (pie chart, bar chart)
+- Data backup system with export/import/clear functionality

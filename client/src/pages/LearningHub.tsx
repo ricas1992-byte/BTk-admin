@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useApp, type Course, type Unit } from '@/context/AppContext';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Dialog,
   DialogContent,
@@ -38,9 +39,25 @@ import {
   Pencil,
   ChevronDown,
   ChevronUp,
-  Volume2
+  Volume2,
+  TrendingUp,
+  Award,
+  Target,
+  BarChart3
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { 
+  PieChart, 
+  Pie, 
+  Cell, 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  Tooltip, 
+  ResponsiveContainer,
+  Legend
+} from 'recharts';
 
 function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).substring(2);
@@ -420,6 +437,231 @@ function CourseCard({ course, isExpanded, onToggle }: CourseCardProps) {
   );
 }
 
+const CHART_COLORS = ['#D4AF37', '#22c55e', '#3b82f6', '#a855f7', '#ef4444', '#14b8a6'];
+
+function LearningAnalytics() {
+  const { t, courses, learningProgress } = useApp();
+
+  const stats = useMemo(() => {
+    let totalUnits = 0;
+    let completedUnits = 0;
+    let completedCourses = 0;
+
+    const courseData = courses.map(course => {
+      const progress = learningProgress.find(p => p.courseId === course.id);
+      const completed = progress?.completedUnits.length || 0;
+      const total = course.units.length;
+      
+      totalUnits += total;
+      completedUnits += completed;
+      
+      const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+      if (percent === 100 && total > 0) completedCourses++;
+      
+      return {
+        name: course.title.length > 15 ? course.title.substring(0, 15) + '...' : course.title,
+        fullName: course.title,
+        completed,
+        remaining: total - completed,
+        total,
+        percent,
+      };
+    });
+
+    const overallPercent = totalUnits > 0 
+      ? Math.round((completedUnits / totalUnits) * 100) 
+      : 0;
+
+    const pieData = [
+      { name: t('learning.completed'), value: completedUnits },
+      { name: t('analytics.remaining'), value: totalUnits - completedUnits },
+    ];
+
+    return {
+      totalCourses: courses.length,
+      completedCourses,
+      totalUnits,
+      completedUnits,
+      overallPercent,
+      courseData,
+      pieData,
+    };
+  }, [courses, learningProgress, t]);
+
+  if (courses.length === 0) {
+    return (
+      <Card data-testid="card-analytics-empty">
+        <CardContent className="flex flex-col items-center justify-center py-12">
+          <BarChart3 className="h-12 w-12 text-muted-foreground mb-4" />
+          <p className="text-lg text-muted-foreground">{t('analytics.noData')}</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <div className="space-y-6" data-testid="section-analytics">
+      <div className="grid gap-4 md:grid-cols-4">
+        <Card data-testid="stat-total-courses">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <BookOpen className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">{stats.totalCourses}</p>
+                <p className="text-sm text-muted-foreground">{t('analytics.totalCourses')}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card data-testid="stat-completed-courses">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-green-500/10">
+                <Award className="h-5 w-5 text-green-500" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">{stats.completedCourses}</p>
+                <p className="text-sm text-muted-foreground">{t('analytics.completedCourses')}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card data-testid="stat-total-units">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-blue-500/10">
+                <Target className="h-5 w-5 text-blue-500" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">{stats.completedUnits}/{stats.totalUnits}</p>
+                <p className="text-sm text-muted-foreground">{t('analytics.unitsCompleted')}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card data-testid="stat-overall-progress">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <TrendingUp className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">{stats.overallPercent}%</p>
+                <p className="text-sm text-muted-foreground">{t('analytics.overallProgress')}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card data-testid="chart-progress-pie">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              {t('analytics.overallCompletion')}
+            </CardTitle>
+            <CardDescription>{t('analytics.completionDescription')}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={stats.pieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    paddingAngle={5}
+                    dataKey="value"
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  >
+                    {stats.pieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={index === 0 ? '#22c55e' : '#374151'} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card data-testid="chart-course-progress">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BarChart3 className="h-5 w-5 text-primary" />
+              {t('analytics.courseProgress')}
+            </CardTitle>
+            <CardDescription>{t('analytics.progressDescription')}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={stats.courseData} layout="vertical">
+                  <XAxis type="number" domain={[0, 'dataMax']} />
+                  <YAxis 
+                    type="category" 
+                    dataKey="name" 
+                    width={100}
+                    tick={{ fontSize: 12 }}
+                  />
+                  <Tooltip 
+                    content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                        const data = payload[0].payload;
+                        return (
+                          <div className="bg-popover border rounded-lg p-3 shadow-lg">
+                            <p className="font-medium">{data.fullName}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {data.completed}/{data.total} ({data.percent}%)
+                            </p>
+                          </div>
+                        );
+                      }
+                      return null;
+                    }}
+                  />
+                  <Bar dataKey="completed" stackId="a" fill="#22c55e" name={t('learning.completed')} />
+                  <Bar dataKey="remaining" stackId="a" fill="#374151" name={t('analytics.remaining')} />
+                  <Legend />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card data-testid="card-course-details">
+        <CardHeader>
+          <CardTitle>{t('analytics.detailedProgress')}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {stats.courseData.map((course, index) => (
+              <div key={index} className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-medium truncate flex-1">{course.fullName}</span>
+                  <Badge variant={course.percent === 100 ? 'default' : 'secondary'}>
+                    {course.completed}/{course.total}
+                  </Badge>
+                </div>
+                <Progress value={course.percent} className="h-2" />
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
 export default function LearningHub() {
   const { t, uiLanguage, courses, addCourse } = useApp();
   const { toast } = useToast();
@@ -458,13 +700,13 @@ export default function LearningHub() {
           <DialogTrigger asChild>
             <Button data-testid="button-new-course">
               <Plus className="h-4 w-4 me-2" />
-              {uiLanguage === 'he' ? 'קורס חדש' : 'New Course'}
+              {t('analytics.newCourse')}
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
-                {uiLanguage === 'he' ? 'קורס חדש' : 'New Course'}
+                {t('analytics.newCourse')}
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-4 py-4">
@@ -490,31 +732,50 @@ export default function LearningHub() {
         </Dialog>
       </div>
 
-      {courses.length === 0 ? (
-        <Card data-testid="card-no-courses">
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <BookOpen className="h-12 w-12 text-muted-foreground mb-4" />
-            <p className="text-lg text-muted-foreground mb-4">{t('learning.noCourses')}</p>
-            <Button onClick={() => setIsNewCourseDialogOpen(true)}>
-              <Plus className="h-4 w-4 me-2" />
-              {uiLanguage === 'he' ? 'צור קורס ראשון' : 'Create First Course'}
-            </Button>
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="space-y-4">
-          {courses.map(course => (
-            <CourseCard
-              key={course.id}
-              course={course}
-              isExpanded={expandedCourseId === course.id}
-              onToggle={() => setExpandedCourseId(
-                expandedCourseId === course.id ? null : course.id
-              )}
-            />
-          ))}
-        </div>
-      )}
+      <Tabs defaultValue="courses" className="w-full">
+        <TabsList className="w-full justify-start">
+          <TabsTrigger value="courses" className="gap-2" data-testid="tab-courses">
+            <BookOpen className="h-4 w-4" />
+            {t('learning.courses')}
+          </TabsTrigger>
+          <TabsTrigger value="analytics" className="gap-2" data-testid="tab-analytics">
+            <BarChart3 className="h-4 w-4" />
+            {t('analytics.title')}
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="courses" className="mt-6">
+          {courses.length === 0 ? (
+            <Card data-testid="card-no-courses">
+              <CardContent className="flex flex-col items-center justify-center py-12">
+                <BookOpen className="h-12 w-12 text-muted-foreground mb-4" />
+                <p className="text-lg text-muted-foreground mb-4">{t('learning.noCourses')}</p>
+                <Button onClick={() => setIsNewCourseDialogOpen(true)}>
+                  <Plus className="h-4 w-4 me-2" />
+                  {t('analytics.createFirst')}
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="space-y-4">
+              {courses.map(course => (
+                <CourseCard
+                  key={course.id}
+                  course={course}
+                  isExpanded={expandedCourseId === course.id}
+                  onToggle={() => setExpandedCourseId(
+                    expandedCourseId === course.id ? null : course.id
+                  )}
+                />
+              ))}
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="analytics" className="mt-6">
+          <LearningAnalytics />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
