@@ -9,6 +9,7 @@ import Dashboard from "@/pages/Dashboard";
 import Documents from "@/pages/Documents";
 import WritingStudio from "@/pages/WritingStudio";
 import LearningHub from "@/pages/LearningHub";
+import Settings from "@/pages/Settings";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/writing" component={WritingStudio} />
       <Route path="/writing/:id" component={WritingStudio} />
       <Route path="/learning" component={LearningHub} />
+      <Route path="/settings" component={Settings} />
       <Route component={NotFound} />
     </Switch>
   );

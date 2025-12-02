@@ -9,7 +9,8 @@ import {
   BookOpen, 
   Globe, 
   Menu,
-  X
+  X,
+  Settings
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -32,6 +33,7 @@ export function Layout({ children }: LayoutProps) {
     { path: '/documents', label: t('nav.documents'), icon: FileText },
     { path: '/writing', label: t('nav.writing'), icon: Pencil },
     { path: '/learning', label: t('nav.learning'), icon: BookOpen },
+    { path: '/settings', label: t('nav.settings'), icon: Settings },
   ];
 
   const isActive = (path: string) => {
@@ -104,10 +106,10 @@ export function Layout({ children }: LayoutProps) {
                   data-testid="button-language-toggle"
                 >
                   <Globe className="h-5 w-5" />
-                  <span>{t('nav.language')}: {uiLanguage === 'he' ? 'עברית' : 'English'}</span>
+                  <span>{t('nav.language')}: {t(`lang.${uiLanguage}`)}</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align={uiLanguage === 'he' ? 'end' : 'start'}>
+              <DropdownMenuContent align={uiLanguage === 'he' || uiLanguage === 'ar' ? 'end' : 'start'}>
                 <DropdownMenuItem 
                   onClick={() => setUiLanguage('he')}
                   data-testid="button-lang-he"
@@ -119,6 +121,30 @@ export function Layout({ children }: LayoutProps) {
                   data-testid="button-lang-en"
                 >
                   English
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => setUiLanguage('ru')}
+                  data-testid="button-lang-ru"
+                >
+                  Русский
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => setUiLanguage('ar')}
+                  data-testid="button-lang-ar"
+                >
+                  العربية
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => setUiLanguage('es')}
+                  data-testid="button-lang-es"
+                >
+                  Español
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => setUiLanguage('fr')}
+                  data-testid="button-lang-fr"
+                >
+                  Français
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -168,10 +194,10 @@ export function Layout({ children }: LayoutProps) {
                   data-testid="button-header-language"
                 >
                   <Globe className="h-4 w-4" />
-                  <span className="hidden sm:inline">{uiLanguage === 'he' ? 'עברית' : 'EN'}</span>
+                  <span className="hidden sm:inline">{t(`lang.${uiLanguage}`)}</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align={uiLanguage === 'he' ? 'start' : 'end'}>
+              <DropdownMenuContent align={uiLanguage === 'he' || uiLanguage === 'ar' ? 'start' : 'end'}>
                 <DropdownMenuItem 
                   onClick={() => setUiLanguage('he')}
                   data-testid="button-header-lang-he"
@@ -183,6 +209,30 @@ export function Layout({ children }: LayoutProps) {
                   data-testid="button-header-lang-en"
                 >
                   English
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => setUiLanguage('ru')}
+                  data-testid="button-header-lang-ru"
+                >
+                  Русский
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => setUiLanguage('ar')}
+                  data-testid="button-header-lang-ar"
+                >
+                  العربية
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => setUiLanguage('es')}
+                  data-testid="button-header-lang-es"
+                >
+                  Español
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => setUiLanguage('fr')}
+                  data-testid="button-header-lang-fr"
+                >
+                  Français
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
