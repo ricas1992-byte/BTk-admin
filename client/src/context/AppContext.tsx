@@ -12,7 +12,7 @@ import {
 export type DocumentType = 'BOOK' | 'COURSE' | 'DRAFT' | 'STUDY' | 'FOUNDATION' | 'PROMPT' | 'NOTE';
 export type TaskType = 'WRITING' | 'TRANSLATION' | 'LEARNING' | 'TECH';
 export type TaskStatus = 'OPEN' | 'IN_PROGRESS' | 'DONE';
-export type TaskPriority = 'LOW' | 'NORMAL' | 'HIGH';
+export type TaskPriority = 'LOW' | 'NORMAL' | 'HIGH' | 'URGENT';
 export type TaskCategory = 'WORK' | 'PERSONAL' | 'STUDY' | 'PROJECT' | 'MEETING' | 'OTHER';
 export type Language = 'he' | 'en' | 'ru' | 'ar' | 'es' | 'fr';
 
@@ -213,6 +213,7 @@ const translations: Record<Language, Record<string, string>> = {
     'priority.low': 'נמוכה',
     'priority.normal': 'רגילה',
     'priority.high': 'גבוהה',
+    'priority.urgent': 'דחופה',
     'category.work': 'עבודה',
     'category.personal': 'אישי',
     'category.study': 'לימודים',
@@ -371,6 +372,7 @@ const translations: Record<Language, Record<string, string>> = {
     'priority.low': 'Low',
     'priority.normal': 'Normal',
     'priority.high': 'High',
+    'priority.urgent': 'Urgent',
     'category.work': 'Work',
     'category.personal': 'Personal',
     'category.study': 'Study',
@@ -533,6 +535,7 @@ const translations: Record<Language, Record<string, string>> = {
     'priority.low': 'Низкий',
     'priority.normal': 'Обычный',
     'priority.high': 'Высокий',
+    'priority.urgent': 'Срочный',
     'category.work': 'Работа',
     'category.personal': 'Личное',
     'category.study': 'Учёба',
@@ -695,6 +698,7 @@ const translations: Record<Language, Record<string, string>> = {
     'priority.low': 'منخفضة',
     'priority.normal': 'عادية',
     'priority.high': 'عالية',
+    'priority.urgent': 'عاجلة',
     'category.work': 'عمل',
     'category.personal': 'شخصي',
     'category.study': 'دراسة',
@@ -857,6 +861,7 @@ const translations: Record<Language, Record<string, string>> = {
     'priority.low': 'Baja',
     'priority.normal': 'Normal',
     'priority.high': 'Alta',
+    'priority.urgent': 'Urgente',
     'category.work': 'Trabajo',
     'category.personal': 'Personal',
     'category.study': 'Estudio',
@@ -1019,6 +1024,7 @@ const translations: Record<Language, Record<string, string>> = {
     'priority.low': 'Basse',
     'priority.normal': 'Normale',
     'priority.high': 'Haute',
+    'priority.urgent': 'Urgente',
     'category.work': 'Travail',
     'category.personal': 'Personnel',
     'category.study': 'Études',

@@ -71,7 +71,7 @@ import { CSS } from '@dnd-kit/utilities';
 
 const TASK_TYPES: TaskType[] = ['WRITING', 'TRANSLATION', 'LEARNING', 'TECH'];
 const TASK_STATUSES: TaskStatus[] = ['OPEN', 'IN_PROGRESS', 'DONE'];
-const TASK_PRIORITIES: TaskPriority[] = ['LOW', 'NORMAL', 'HIGH'];
+const TASK_PRIORITIES: TaskPriority[] = ['LOW', 'NORMAL', 'HIGH', 'URGENT'];
 const TASK_CATEGORIES: TaskCategory[] = ['WORK', 'PERSONAL', 'STUDY', 'PROJECT', 'MEETING', 'OTHER'];
 
 function SortableTaskCard({ task, onEdit, onDelete }: { task: Task; onEdit: (task: Task) => void; onDelete: (id: string) => void }) {
@@ -95,6 +95,7 @@ function SortableTaskCard({ task, onEdit, onDelete }: { task: Task; onEdit: (tas
     LOW: 'bg-pastel-green text-foreground',
     NORMAL: 'bg-pastel-blue text-foreground',
     HIGH: 'bg-pastel-rose text-foreground',
+    URGENT: 'bg-red-500/80 text-white',
   };
 
   const typeColors: Record<TaskType, string> = {
@@ -239,7 +240,8 @@ function TaskListItem({ task, onEdit, onDelete }: { task: Task; onEdit: (task: T
   const priorityColors: Record<TaskPriority, string> = {
     LOW: 'text-green-500',
     NORMAL: 'text-blue-500',
-    HIGH: 'text-red-500',
+    HIGH: 'text-orange-500',
+    URGENT: 'text-red-500',
   };
 
   const typeColors: Record<TaskType, string> = {
@@ -446,7 +448,7 @@ export default function Tasks() {
   const sortedTasks = useMemo(() => {
     return [...filteredTasks].sort((a, b) => {
       const statusOrder = { OPEN: 0, IN_PROGRESS: 1, DONE: 2 };
-      const priorityOrder = { HIGH: 0, NORMAL: 1, LOW: 2 };
+      const priorityOrder = { URGENT: 0, HIGH: 1, NORMAL: 2, LOW: 3 };
       
       if (statusOrder[a.status] !== statusOrder[b.status]) {
         return statusOrder[a.status] - statusOrder[b.status];
