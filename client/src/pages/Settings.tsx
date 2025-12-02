@@ -10,7 +10,9 @@ import {
   BookOpen, 
   CheckSquare,
   Database,
-  AlertTriangle
+  AlertTriangle,
+  HardDrive,
+  Cloud
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -99,15 +101,18 @@ export default function Settings() {
 
   return (
     <div className="space-y-6" data-testid="page-settings">
-      <h1 className="text-2xl font-bold" data-testid="text-settings-title">
+      <h1 className="text-2xl font-semibold tracking-tight" data-testid="text-settings-title">
         {t('settings.title')}
       </h1>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Card data-testid="card-statistics">
+        {/* Statistics Card */}
+        <Card className="shadow-card rounded-card" data-testid="card-statistics">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Database className="h-5 w-5 text-primary" />
+            <CardTitle className="flex items-center gap-2.5 text-lg">
+              <div className="p-2 rounded-full bg-pastel-teal">
+                <Database className="h-4 w-4 text-primary" strokeWidth={1.75} />
+              </div>
               {t('settings.statistics')}
             </CardTitle>
             <CardDescription>
@@ -116,57 +121,63 @@ export default function Settings() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-muted-foreground" />
-                  <span>{t('settings.totalDocuments')}</span>
+              <div className="flex items-center justify-between p-3 rounded-card bg-pastel-blue">
+                <div className="flex items-center gap-3">
+                  <FileText className="h-5 w-5 text-primary" strokeWidth={1.75} />
+                  <span className="font-medium">{t('settings.totalDocuments')}</span>
                 </div>
-                <span className="font-semibold text-primary" data-testid="text-doc-count">
+                <span className="text-xl font-bold text-primary" data-testid="text-doc-count">
                   {documents.length}
                 </span>
               </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <BookOpen className="h-4 w-4 text-muted-foreground" />
-                  <span>{t('settings.totalCourses')}</span>
+              <div className="flex items-center justify-between p-3 rounded-card bg-pastel-green">
+                <div className="flex items-center gap-3">
+                  <BookOpen className="h-5 w-5 text-primary" strokeWidth={1.75} />
+                  <span className="font-medium">{t('settings.totalCourses')}</span>
                 </div>
-                <span className="font-semibold text-primary" data-testid="text-course-count">
+                <span className="text-xl font-bold text-primary" data-testid="text-course-count">
                   {courses.length}
                 </span>
               </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <CheckSquare className="h-4 w-4 text-muted-foreground" />
-                  <span>{t('settings.totalTasks')}</span>
+              <div className="flex items-center justify-between p-3 rounded-card bg-pastel-beige">
+                <div className="flex items-center gap-3">
+                  <CheckSquare className="h-5 w-5 text-primary" strokeWidth={1.75} />
+                  <span className="font-medium">{t('settings.totalTasks')}</span>
                 </div>
-                <span className="font-semibold text-primary" data-testid="text-task-count">
+                <span className="text-xl font-bold text-primary" data-testid="text-task-count">
                   {tasks.length}
                 </span>
               </div>
-              <div className="pt-4 border-t">
+              <div className="pt-4 border-t border-border">
                 <div className="flex items-center justify-between text-sm text-muted-foreground">
-                  <span>{t('settings.version')}</span>
-                  <span>1.0.0</span>
+                  <div className="flex items-center gap-2">
+                    <HardDrive className="h-4 w-4" />
+                    <span>{t('settings.version')}</span>
+                  </div>
+                  <span className="font-medium">1.0.0</span>
                 </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card data-testid="card-backup">
+        {/* Backup Card */}
+        <Card className="shadow-card rounded-card" data-testid="card-backup">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Download className="h-5 w-5 text-primary" />
+            <CardTitle className="flex items-center gap-2.5 text-lg">
+              <div className="p-2 rounded-full bg-pastel-rose">
+                <Cloud className="h-4 w-4 text-primary" strokeWidth={1.75} />
+              </div>
               {t('settings.backup')}
             </CardTitle>
             <CardDescription>
               {t('settings.backupDescription')}
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3">
             <Button 
               onClick={handleExport} 
-              className="w-full"
+              className="w-full touch-target rounded-button"
               data-testid="button-export"
             >
               <Download className="h-4 w-4 me-2" />
@@ -184,7 +195,7 @@ export default function Settings() {
             <Button 
               variant="outline" 
               onClick={handleImportClick}
-              className="w-full"
+              className="w-full touch-target rounded-button"
               data-testid="button-import"
             >
               <Upload className="h-4 w-4 me-2" />
@@ -195,14 +206,14 @@ export default function Settings() {
               <AlertDialogTrigger asChild>
                 <Button 
                   variant="destructive" 
-                  className="w-full"
+                  className="w-full touch-target rounded-button"
                   data-testid="button-clear"
                 >
                   <Trash2 className="h-4 w-4 me-2" />
                   {t('settings.clear')}
                 </Button>
               </AlertDialogTrigger>
-              <AlertDialogContent>
+              <AlertDialogContent className="rounded-card">
                 <AlertDialogHeader>
                   <AlertDialogTitle className="flex items-center gap-2">
                     <AlertTriangle className="h-5 w-5 text-destructive" />
@@ -213,12 +224,12 @@ export default function Settings() {
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel data-testid="button-cancel-clear">
+                  <AlertDialogCancel className="touch-target rounded-button" data-testid="button-cancel-clear">
                     {t('button.cancel')}
                   </AlertDialogCancel>
                   <AlertDialogAction 
                     onClick={handleClear}
-                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90 touch-target rounded-button"
                     data-testid="button-confirm-clear"
                   >
                     {t('settings.clear')}

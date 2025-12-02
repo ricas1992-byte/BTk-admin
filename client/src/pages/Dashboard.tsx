@@ -10,7 +10,8 @@ import {
   Clock, 
   AlertCircle,
   Plus,
-  Pencil
+  Pencil,
+  TrendingUp
 } from 'lucide-react';
 import { Link } from 'wouter';
 
@@ -18,9 +19,9 @@ function TaskItem({ task }: { task: Task }) {
   const { t, updateTask } = useApp();
   
   const statusColors = {
-    OPEN: 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400',
-    IN_PROGRESS: 'bg-blue-500/20 text-blue-600 dark:text-blue-400',
-    DONE: 'bg-green-500/20 text-green-600 dark:text-green-400',
+    OPEN: 'bg-pastel-beige text-foreground',
+    IN_PROGRESS: 'bg-pastel-blue text-foreground',
+    DONE: 'bg-pastel-green text-foreground',
   };
 
   const statusIcons = {
@@ -40,14 +41,14 @@ function TaskItem({ task }: { task: Task }) {
 
   return (
     <div 
-      className="flex items-center gap-3 p-3 rounded-md bg-muted/50 hover-elevate cursor-pointer"
+      className="flex items-center gap-3 p-3.5 rounded-card bg-muted/40 hover:bg-muted/70 transition-all duration-150 cursor-pointer touch-target"
       onClick={cycleStatus}
       data-testid={`task-item-${task.id}`}
     >
-      <StatusIcon className="h-5 w-5 flex-shrink-0" />
+      <StatusIcon className="h-5 w-5 flex-shrink-0 text-primary" strokeWidth={1.75} />
       <div className="flex-1 min-w-0">
-        <p className="font-medium truncate">{task.title}</p>
-        <div className="flex items-center gap-2 mt-1">
+        <p className="font-medium truncate text-[15px]">{task.title}</p>
+        <div className="flex items-center gap-2 mt-1.5 flex-wrap">
           <Badge variant="secondary" className="text-xs">
             {t(`type.${task.type}`)}
           </Badge>
@@ -90,13 +91,14 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6" data-testid="page-dashboard">
+      {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
-        <h1 className="text-2xl font-bold" data-testid="text-dashboard-title">
+        <h1 className="text-2xl font-semibold tracking-tight" data-testid="text-dashboard-title">
           {t('dashboard.title')}
         </h1>
         <div className="flex gap-2">
           <Link href="/writing">
-            <Button data-testid="button-new-document">
+            <Button className="rounded-button touch-target" data-testid="button-new-document">
               <Plus className="h-4 w-4 me-2" />
               {t('documents.new')}
             </Button>
@@ -104,13 +106,16 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card data-testid="card-documents-count">
+      {/* Stats Cards - Pastel colored */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Card className="bg-pastel-teal border-pastel-teal shadow-card rounded-card" data-testid="card-documents-count">
           <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
+            <CardTitle className="text-sm font-medium text-foreground/80">
               {t('dashboard.documentsCount')}
             </CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
+            <div className="p-2 rounded-full bg-background/50">
+              <FileText className="h-4 w-4 text-primary" strokeWidth={1.75} />
+            </div>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold" data-testid="text-documents-count">
@@ -119,12 +124,14 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card data-testid="card-courses-count">
+        <Card className="bg-pastel-blue border-pastel-blue shadow-card rounded-card" data-testid="card-courses-count">
           <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
+            <CardTitle className="text-sm font-medium text-foreground/80">
               {t('dashboard.coursesCount')}
             </CardTitle>
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
+            <div className="p-2 rounded-full bg-background/50">
+              <BookOpen className="h-4 w-4 text-primary" strokeWidth={1.75} />
+            </div>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold" data-testid="text-courses-count">
@@ -133,29 +140,33 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card data-testid="card-tasks-count">
+        <Card className="bg-pastel-rose border-pastel-rose shadow-card rounded-card" data-testid="card-tasks-count">
           <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
+            <CardTitle className="text-sm font-medium text-foreground/80">
               {t('dashboard.tasksCount')}
             </CardTitle>
-            <AlertCircle className="h-4 w-4 text-muted-foreground" />
+            <div className="p-2 rounded-full bg-background/50">
+              <AlertCircle className="h-4 w-4 text-primary" strokeWidth={1.75} />
+            </div>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold" data-testid="text-tasks-count">
               {openTasks}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-foreground/60 mt-1">
               {inProgressTasks} {t('status.in_progress')}
             </p>
           </CardContent>
         </Card>
 
-        <Card data-testid="card-learning-progress">
+        <Card className="bg-pastel-green border-pastel-green shadow-card rounded-card" data-testid="card-learning-progress">
           <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
+            <CardTitle className="text-sm font-medium text-foreground/80">
               {t('learning.progress')}
             </CardTitle>
-            <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
+            <div className="p-2 rounded-full bg-background/50">
+              <TrendingUp className="h-4 w-4 text-primary" strokeWidth={1.75} />
+            </div>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold" data-testid="text-learning-progress">
@@ -166,19 +177,24 @@ export default function Dashboard() {
         </Card>
       </div>
 
+      {/* Main Content Grid */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="lg:col-span-1" data-testid="card-today-tasks">
+        {/* Today's Tasks */}
+        <Card className="shadow-card rounded-card" data-testid="card-today-tasks">
           <CardHeader className="flex flex-row items-center justify-between gap-2">
-            <CardTitle>{t('dashboard.todayTasks')}</CardTitle>
-            <Badge variant="secondary">{todayTasks.length}</Badge>
+            <CardTitle className="text-lg">{t('dashboard.todayTasks')}</CardTitle>
+            <Badge variant="secondary" className="rounded-full px-3">
+              {todayTasks.length}
+            </Badge>
           </CardHeader>
           <CardContent>
             {todayTasks.length === 0 ? (
-              <p className="text-muted-foreground text-center py-8" data-testid="text-no-tasks">
-                {t('dashboard.noTasks')}
-              </p>
+              <div className="text-center py-10 text-muted-foreground" data-testid="text-no-tasks">
+                <Clock className="h-10 w-10 mx-auto mb-3 opacity-40" strokeWidth={1.5} />
+                <p>{t('dashboard.noTasks')}</p>
+              </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {todayTasks.slice(0, 5).map(task => (
                   <TaskItem key={task.id} task={task} />
                 ))}
@@ -187,38 +203,42 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-1" data-testid="card-writing-status">
+        {/* Recent Documents */}
+        <Card className="shadow-card rounded-card" data-testid="card-writing-status">
           <CardHeader className="flex flex-row items-center justify-between gap-2">
-            <CardTitle>{t('dashboard.writingStatus')}</CardTitle>
+            <CardTitle className="text-lg">{t('dashboard.writingStatus')}</CardTitle>
             <Link href="/documents">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="icon" className="touch-target">
                 <FileText className="h-4 w-4" />
               </Button>
             </Link>
           </CardHeader>
           <CardContent>
             {recentDocuments.length === 0 ? (
-              <div className="text-center py-8">
+              <div className="text-center py-10">
+                <FileText className="h-10 w-10 mx-auto mb-3 text-muted-foreground opacity-40" strokeWidth={1.5} />
                 <p className="text-muted-foreground mb-4">{t('documents.noDocuments')}</p>
                 <Link href="/writing">
-                  <Button>
+                  <Button className="rounded-button">
                     <Plus className="h-4 w-4 me-2" />
                     {t('documents.new')}
                   </Button>
                 </Link>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {recentDocuments.map(doc => (
                   <Link key={doc.id} href={`/writing/${doc.id}`}>
                     <div 
-                      className="flex items-center gap-3 p-3 rounded-md bg-muted/50 hover-elevate cursor-pointer"
+                      className="flex items-center gap-3 p-3.5 rounded-card bg-muted/40 hover:bg-muted/70 transition-all duration-150 cursor-pointer touch-target"
                       data-testid={`recent-doc-${doc.id}`}
                     >
-                      <Pencil className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                      <div className="p-2 rounded-full bg-pastel-teal">
+                        <Pencil className="h-3.5 w-3.5 text-primary" strokeWidth={1.75} />
+                      </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium truncate">{doc.title}</p>
-                        <div className="flex items-center gap-2 mt-1">
+                        <p className="font-medium truncate text-[15px]">{doc.title}</p>
+                        <div className="flex items-center gap-2 mt-1 flex-wrap">
                           <Badge variant="secondary" className="text-xs">
                             {t(`type.${doc.type}`)}
                           </Badge>
@@ -236,31 +256,38 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      <Card data-testid="card-work-journal">
+      {/* Work Journal Summary */}
+      <Card className="shadow-card rounded-card" data-testid="card-work-journal">
         <CardHeader>
-          <CardTitle>{t('dashboard.workJournal')}</CardTitle>
+          <CardTitle className="text-lg">{t('dashboard.workJournal')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 sm:grid-cols-3">
-            <div className="flex items-center gap-3 p-4 rounded-lg bg-green-500/10">
-              <CheckCircle2 className="h-8 w-8 text-green-500" />
+            <div className="flex items-center gap-4 p-4 rounded-card bg-pastel-green touch-target">
+              <div className="p-3 rounded-full bg-background/60">
+                <CheckCircle2 className="h-6 w-6 text-primary" strokeWidth={1.75} />
+              </div>
               <div>
                 <p className="text-2xl font-bold">{completedTasks}</p>
-                <p className="text-sm text-muted-foreground">{t('status.done')}</p>
+                <p className="text-sm text-foreground/70">{t('status.done')}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 p-4 rounded-lg bg-blue-500/10">
-              <Clock className="h-8 w-8 text-blue-500" />
+            <div className="flex items-center gap-4 p-4 rounded-card bg-pastel-blue touch-target">
+              <div className="p-3 rounded-full bg-background/60">
+                <Clock className="h-6 w-6 text-primary" strokeWidth={1.75} />
+              </div>
               <div>
                 <p className="text-2xl font-bold">{inProgressTasks}</p>
-                <p className="text-sm text-muted-foreground">{t('status.in_progress')}</p>
+                <p className="text-sm text-foreground/70">{t('status.in_progress')}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 p-4 rounded-lg bg-yellow-500/10">
-              <AlertCircle className="h-8 w-8 text-yellow-500" />
+            <div className="flex items-center gap-4 p-4 rounded-card bg-pastel-beige touch-target">
+              <div className="p-3 rounded-full bg-background/60">
+                <AlertCircle className="h-6 w-6 text-primary" strokeWidth={1.75} />
+              </div>
               <div>
                 <p className="text-2xl font-bold">{openTasks}</p>
-                <p className="text-sm text-muted-foreground">{t('status.open')}</p>
+                <p className="text-sm text-foreground/70">{t('status.open')}</p>
               </div>
             </div>
           </div>

@@ -1,126 +1,230 @@
 # Design Guidelines: Beyond the Keys Management System
 
-## Design Philosophy
-A professional, minimalist productivity platform optimized for iOS/iPad/iPhone with bilingual RTL/LTR support. The design emphasizes clarity, efficiency, and accessibility with a clean light theme and gold accents.
+## Design Philosophy - C2 Craft High-End Premium Pastel UI
+A sophisticated, craft-style premium productivity platform with soft pastel colors, refined typography, and iOS-optimized touch interactions. The design emphasizes elegance, clarity, and a calming user experience.
 
 ## Brand Identity
 **Logo Integration**: Beyond the Keys logo (dark blue and gold, featuring keyboard with rising graph motif)
-- Display prominently in sidebar header (140px width, centered)
+- Display in sidebar header (64px height, centered)
 - Include in main header at 40px height
 - Logo path: `/public/logo.png`
 
-## Color System (Light Mode)
+## C2 Craft Color System
+
+### Light Mode (Primary)
+```css
+/* Core Backgrounds */
+--bg: #FFFFFF
+--bg-soft: #FAF8F6 (Sidebar)
+--bg-card: #FFFFFF
+
+/* Primary Accent - Teal/Craft Green */
+--accent: #5AB1A7
+--accent-dark: #3E857C
+--accent-light: #E0F4F2
+
+/* Premium Pastel Palette */
+--pastel-rose: #FAD4D4
+--pastel-blue: #D7E9FF
+--pastel-beige: #F4EBD0
+--pastel-green: #DFF5E1
+--pastel-teal: #E0F4F2
+
+/* Text Colors */
+--text-main: #273043
+--text-soft: #69707D (Secondary text)
+--text-muted: 60% opacity of main
+
+/* Borders */
+--border-soft: #E8E6E3
 ```
-Primary Background: #FFFFFF (White)
-Sidebar Background: #FAFAFA (Light Gray)
-Header Background: #FFFFFF (White)
-Card Background: #FFFFFF (White)
-Primary Accent: #D4AF37 (Gold)
-Accent Hover: #b9972f (Deep Gold)
-Text Primary: #1e293b (Dark Slate)
-Text Muted: #6B7280 (Medium Gray)
-Border Color: #E5E7EB (Light Border)
+
+### Dark Mode
+```css
+--background: #1A1D24
+--card: #1E2128
+--sidebar: #14161A
+--pastel colors: Darker variants at 30% saturation
 ```
 
-## Layout Architecture
+## Typography System
 
-**Sidebar Navigation** (260px fixed width):
-- Light gray background (#FAFAFA)
-- Logo at top, centered
-- Navigation links with subtle dividers (1px border)
-- Full viewport height
-- Dark text on light background
-- Right border (LTR) or left border (RTL) for visual separation
+### Font Stack
+```css
+font-family: "SF Pro Display", "SF Pro Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+```
 
-**Main Content Area**:
-- White background (#FFFFFF)
-- Content cards on white background with 10px border-radius
-- 16px padding within cards, 20px margin between
-
-**Header**:
-- Full width, white background (#FFFFFF)
-- 12px vertical, 20px horizontal padding
-- Logo (40px height) + language selector flexbox layout
-- Dark text with bottom border
-
-## Typography
-- System fonts: system-ui, -apple-system, Segoe UI, Arial
-- RTL mode: text-align right, direction rtl
-- LTR mode: text-align left, direction ltr
-
-## Spacing Scale
-Use Tailwind spacing: 2, 4, 8, 12, 16, 20, 24 (in px equivalents)
-- Card padding: 16px
-- Section gaps: 24px
-- Button padding: 8px vertical, 18px horizontal
+### Type Scale
+- **H1**: 28px (1.75rem), weight 600, line-height 1.2, letter-spacing -0.02em
+- **H2**: 20px (1.25rem), weight 500, line-height 1.3, letter-spacing -0.01em
+- **Body**: 15-16px, weight 400, line-height 1.6
+- **Small**: 13-14px for metadata
 
 ## Component Specifications
 
-**Primary Buttons**:
-- Gold background (#D4AF37)
-- 6px border-radius
-- Bold black text
-- Hover: Deep gold (#b9972f)
-- Large touch targets for iOS (minimum 44px height)
+### Cards (Craft Style)
+```css
+border-radius: 18px (1.125rem)
+box-shadow: 0 6px 20px rgba(0,0,0,0.04)
+padding: 20px
+hover-shadow: 0 8px 28px rgba(0,0,0,0.06)
+transition: all 150ms ease
+```
 
-**Cards**:
-- White background
-- 10px border-radius
-- 16px internal padding
-- 20px bottom margin
-- Clean, minimal shadows
+### Pastel Card Variants
+- **Documents Card**: bg-pastel-teal, border-pastel-teal
+- **Courses Card**: bg-pastel-blue, border-pastel-blue
+- **Tasks Card**: bg-pastel-rose, border-pastel-rose
+- **Progress Card**: bg-pastel-green, border-pastel-green
+- **Notes Card**: bg-pastel-beige, border-pastel-beige
 
-**Navigation Links**:
-- Dark text on light backgrounds
-- 10px vertical padding
-- Hover state with subtle gray background
-- No text decoration
+### Buttons (Craft Style)
+```css
+/* Primary */
+background: var(--accent)
+border-radius: 14px (0.875rem)
+padding: 10px 20px
+hover: transform scale(1.02), shadow
 
-## Screen Layouts
+/* Icon Buttons */
+width: 42px
+height: 42px
+border-radius: 50%
+```
 
-**Dashboard**:
-- Grid of status cards: Today's Tasks, Writing Status, Work Journal
-- Card-based information display
+### Sidebar (Craft Style)
+```css
+background: var(--bg-soft)
+border-radius: 0
+width: 256px
 
-**Documents Page**:
-- List view with filters (type/language/tags)
-- Action buttons: Create, Edit, Delete
-- Document type badges
+/* Selected Item */
+background: var(--accent-light)
+border-right: 4px solid var(--accent) /* LTR */
+border-left: 4px solid var(--accent) /* RTL */
+```
 
-**Writing Studio**:
-- Full-width textarea editor
-- Metadata fields above: Title, Type, Language, Tags
-- Auto-save + manual save buttons
-- Export to JSON option
+### Header
+```css
+background: #FFFFFF
+border-bottom: 1px solid var(--border-soft)
+box-shadow: 0 4px 12px rgba(0,0,0,0.03)
+padding: 12px 24px
+```
 
-**Learning Hub**:
-- Course list with progress indicators
-- Unit navigation within courses
-- "Read Aloud" button (SpeechSynthesis integration)
+## Micro-Animations
 
-## Responsive Behavior
-- iOS-optimized: Large touch targets (44px minimum)
-- Flexbox layouts throughout
-- Single-column mobile, multi-column desktop where appropriate
-- No heavy external libraries
+### Page Transitions
+```css
+animation: fadeIn 150ms ease forwards;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+```
 
-## Accessibility & Internationalization
-- Full RTL support for Hebrew (default) and Arabic
+### Button Hover
+```css
+transition: transform 150ms ease;
+:hover { transform: scale(1.02); }
+:active { transform: scale(0.98); }
+```
+
+### Card Hover
+```css
+transition: box-shadow 200ms ease, transform 150ms ease;
+:hover {
+  box-shadow: 0 8px 28px rgba(0,0,0,0.06);
+  transform: translateY(-1px);
+}
+```
+
+## iOS/Touch Optimization
+
+### Touch Targets
+```css
+min-height: 44px
+min-width: 44px
+/* Large targets for iPad */
+.touch-target-lg { min-height: 48px; min-width: 48px; }
+```
+
+### Responsive Breakpoints
+- Mobile: < 768px
+- Tablet: 768px - 1024px (iPad optimized)
+- Desktop: > 1024px
+
+### Grid System
+```css
+/* Document Grid */
+grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+gap: 16px;
+```
+
+## Spacing System
+Using Tailwind's default spacing scale:
+- **xs**: 4px (gap-1)
+- **sm**: 8px (gap-2)
+- **md**: 16px (gap-4)
+- **lg**: 24px (gap-6)
+- **xl**: 32px (gap-8)
+
+## Special Features
+
+### Focus Mode (Writing Studio)
+```css
+position: fixed;
+inset: 0;
+background: var(--bg);
+max-width: 680px (content);
+font-size: 1.125rem;
+line-height: 1.8;
+```
+
+### Global Search
+```css
+border-radius: 9999px (pill shape);
+background: var(--muted)/50;
+padding: 10px 16px;
+:focus-within {
+  border-color: var(--accent)/30;
+  ring: 2px var(--accent)/10;
+}
+```
+
+### Breadcrumb Navigation
+```css
+font-size: 14px;
+color: var(--text-muted);
+separator: ChevronRight icon;
+current-page: font-weight 500, color var(--text-main);
+```
+
+### Loading Spinner
+```css
+border: 2px solid var(--muted);
+border-top-color: var(--accent);
+animation: spin 1.5s linear infinite;
+```
+
+## RTL/LTR Support
+- Full RTL support for Hebrew and Arabic
 - LTR support for English, Russian, Spanish, French
+- Sidebar border flips (right border LTR, left border RTL)
+- Navigation icons rotate 180° in RTL mode
 - Language toggle in header and sidebar
-- Apply `dir` and `class` attributes to `<html>` element based on language
-- High contrast text (dark text on light backgrounds)
 
-## Interactive States
-- Button hover: Darken gold accent
-- No complex animations (lightweight for iOS)
+## Accessibility
+- High contrast text (dark text on light backgrounds)
 - Focus states for keyboard navigation
-- Clear visual feedback for all actions
-- Subtle elevation on hover for interactive elements
+- Large touch targets (44px minimum)
+- Semantic HTML structure
+- Clear visual feedback for all interactions
 
 ## Key UX Principles
-1. **Offline-First**: All data in LocalStorage, no server dependency
-2. **Multilingual**: 6-language support with proper RTL/LTR handling
-3. **Touch-Optimized**: Large buttons, generous spacing for mobile interactions
-4. **Minimalist**: Clean, distraction-free interface focused on productivity
-5. **Professional**: Clean light theme with gold accents reflecting brand identity
+1. **Craft Premium Feel**: Soft colors, subtle shadows, refined typography
+2. **Touch-First**: Generous touch targets, swipe-friendly layouts
+3. **Minimal Distraction**: Clean interface, focus mode for writing
+4. **Cross-Device Sync**: Firebase-ready architecture (optional)
+5. **Multilingual**: 6-language support with proper RTL/LTR handling
+6. **Offline-First**: LocalStorage for data persistence

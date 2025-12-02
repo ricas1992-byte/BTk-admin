@@ -9,8 +9,18 @@ export default {
         lg: ".5625rem", /* 9px */
         md: ".375rem", /* 6px */
         sm: ".1875rem", /* 3px */
+        card: "1.125rem", /* 18px - Craft style */
+        button: ".875rem", /* 14px - Craft style */
       },
       colors: {
+        // Pastel colors for cards
+        pastel: {
+          rose: "hsl(var(--pastel-rose) / <alpha-value>)",
+          blue: "hsl(var(--pastel-blue) / <alpha-value>)",
+          beige: "hsl(var(--pastel-beige) / <alpha-value>)",
+          green: "hsl(var(--pastel-green) / <alpha-value>)",
+          teal: "hsl(var(--pastel-teal) / <alpha-value>)",
+        },
         // Flat / base colors (regular buttons)
         background: "hsl(var(--background) / <alpha-value>)",
         foreground: "hsl(var(--foreground) / <alpha-value>)",
@@ -82,6 +92,16 @@ export default {
           offline: "rgb(156 163 175)",
         },
       },
+      borderColor: {
+        // Extend border colors for pastel palette
+        pastel: {
+          rose: "hsl(var(--pastel-rose) / <alpha-value>)",
+          blue: "hsl(var(--pastel-blue) / <alpha-value>)",
+          beige: "hsl(var(--pastel-beige) / <alpha-value>)",
+          green: "hsl(var(--pastel-green) / <alpha-value>)",
+          teal: "hsl(var(--pastel-teal) / <alpha-value>)",
+        },
+      },
       fontFamily: {
         sans: ["var(--font-sans)"],
         serif: ["var(--font-serif)"],
@@ -96,10 +116,40 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "fade-in": {
+          from: { opacity: "0", transform: "translateY(4px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "scale-in": {
+          from: { opacity: "0", transform: "scale(0.96)" },
+          to: { opacity: "1", transform: "scale(1)" },
+        },
+        "slide-in-right": {
+          from: { transform: "translateX(100%)" },
+          to: { transform: "translateX(0)" },
+        },
+        "slide-in-left": {
+          from: { transform: "translateX(-100%)" },
+          to: { transform: "translateX(0)" },
+        },
+        "spin-slow": {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in": "fade-in 150ms ease forwards",
+        "scale-in": "scale-in 150ms ease forwards",
+        "slide-in-right": "slide-in-right 300ms ease-out",
+        "slide-in-left": "slide-in-left 300ms ease-out",
+        "spin-slow": "spin-slow 1.5s linear infinite",
+      },
+      boxShadow: {
+        'card': '0 6px 20px rgba(0,0,0,0.04)',
+        'header': '0 4px 12px rgba(0,0,0,0.03)',
+        'hover': '0 8px 28px rgba(0,0,0,0.06)',
       },
     },
   },

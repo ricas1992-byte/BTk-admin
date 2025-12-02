@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import RichTextEditor from '@/components/RichTextEditor';
 import {
   Select,
@@ -23,7 +24,9 @@ import {
   ArrowRight,
   Clock,
   CheckCircle2,
-  FileText
+  FileText,
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -52,6 +55,7 @@ export default function WritingStudio() {
   const [isSaving, setIsSaving] = useState(false);
   const [documentId, setDocumentId] = useState<string | null>(params.id || null);
   const [autoSaveEnabled, setAutoSaveEnabled] = useState(true);
+  const [focusMode, setFocusMode] = useState(false);
 
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -191,7 +195,79 @@ export default function WritingStudio() {
     });
   };
 
+  const toggleFocusMode = () => {
+    setFocusMode(!focusMode);
+  };
+
   const BackIcon = uiLanguage === 'he' ? ArrowRight : ArrowLeft;
+
+  if (focusMode) {
+    return (
+      <div 
+        className="focus-mode animate-fade-in"
+        data-testid="focus-mode-container"
+      >
+        <div className="h-full flex flex-col">
+          {/* Focus Mode Header - minimal toolbar */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-border/30 bg-background/80 backdrop-blur-sm">
+            <div className="flex items-center gap-3">
+              {lastSaved && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground bg-pastel-green/50 px-3 py-1.5 rounded-full">
+                  <CheckCircle2 className="h-4 w-4 text-primary" />
+                  <span>{lastSaved.toLocaleTimeString()}</span>
+                </div>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={saveDocument}
+                disabled={isSaving}
+                className="touch-target rounded-button"
+                data-testid="button-focus-save"
+              >
+                <Save className="h-4 w-4 me-2" />
+                {isSaving ? '...' : t('button.save')}
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={toggleFocusMode}
+                className="touch-target h-11 w-11 rounded-full"
+                data-testid="button-exit-focus"
+              >
+                <Minimize2 className="h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+          
+          {/* Focus Mode Content - centered typography */}
+          <div className="flex-1 overflow-auto">
+            <div className="focus-mode-content">
+              <Input
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder={t('placeholder.title')}
+                className="title-input text-2xl font-semibold border-0 border-b-2 border-border/50 rounded-none px-0 py-4 mb-8 focus-visible:ring-0 focus-visible:border-primary bg-transparent"
+                data-testid="input-focus-title"
+              />
+              
+              <div className="prose prose-lg max-w-none">
+                <RichTextEditor
+                  content={content}
+                  onChange={setContent}
+                  placeholder={t('placeholder.content')}
+                  direction={language === 'he' ? 'rtl' : 'ltr'}
+                  data-testid="rich-editor-focus"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6" data-testid="page-writing-studio">
@@ -201,19 +277,20 @@ export default function WritingStudio() {
             variant="ghost" 
             size="icon"
             onClick={() => navigate('/documents')}
+            className="touch-target"
             data-testid="button-back"
           >
             <BackIcon className="h-5 w-5" />
           </Button>
-          <h1 className="text-2xl font-bold" data-testid="text-writing-title">
+          <h1 className="text-2xl font-semibold tracking-tight" data-testid="text-writing-title">
             {t('writing.title')}
           </h1>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
           {lastSaved && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <CheckCircle2 className="h-4 w-4 text-green-500" />
+            <div className="flex items-center gap-2 text-sm text-muted-foreground px-3 py-1.5 bg-pastel-green rounded-full">
+              <CheckCircle2 className="h-4 w-4 text-primary" />
               <span>
                 {t('writing.lastSaved')}: {lastSaved.toLocaleTimeString()}
               </span>
@@ -222,8 +299,20 @@ export default function WritingStudio() {
 
           <Button 
             variant="outline" 
+            size="icon"
+            onClick={toggleFocusMode}
+            className="touch-target rounded-button"
+            title={uiLanguage === 'he' ? 'מצב מיקוד' : 'Focus Mode'}
+            data-testid="button-focus-mode"
+          >
+            <Maximize2 className="h-4 w-4" />
+          </Button>
+
+          <Button 
+            variant="outline" 
             onClick={exportDocument}
             disabled={isContentEmpty(content)}
+            className="touch-target rounded-button"
             data-testid="button-export"
           >
             <Download className="h-4 w-4 me-2" />
@@ -233,6 +322,7 @@ export default function WritingStudio() {
           <Button 
             onClick={saveDocument}
             disabled={isSaving}
+            className="touch-target rounded-button"
             data-testid="button-save"
           >
             <Save className="h-4 w-4 me-2" />
@@ -243,7 +333,7 @@ export default function WritingStudio() {
 
       <div className="grid gap-6 lg:grid-cols-4">
         <div className="lg:col-span-1 space-y-4">
-          <Card data-testid="card-document-settings">
+          <Card className="shadow-card rounded-card" data-testid="card-document-settings">
             <CardHeader>
               <CardTitle className="text-base">
                 {uiLanguage === 'he' ? 'הגדרות מסמך' : 'Document Settings'}
@@ -251,14 +341,14 @@ export default function WritingStudio() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="type">{t('writing.typeField')}</Label>
+                <Label htmlFor="type" className="text-sm font-medium">{t('writing.typeField')}</Label>
                 <Select value={type} onValueChange={(v) => setType(v as DocumentType)}>
-                  <SelectTrigger id="type" data-testid="select-type">
+                  <SelectTrigger id="type" className="touch-target rounded-button" data-testid="select-type">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     {DOCUMENT_TYPES.map(docType => (
-                      <SelectItem key={docType} value={docType}>
+                      <SelectItem key={docType} value={docType} className="touch-target">
                         {t(`type.${docType}`)}
                       </SelectItem>
                     ))}
@@ -267,50 +357,55 @@ export default function WritingStudio() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="language">{t('writing.languageField')}</Label>
+                <Label htmlFor="language" className="text-sm font-medium">{t('writing.languageField')}</Label>
                 <Select value={language} onValueChange={(v) => setLanguage(v as Language)}>
-                  <SelectTrigger id="language" data-testid="select-language">
+                  <SelectTrigger id="language" className="touch-target rounded-button" data-testid="select-language">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="he">{t('lang.he')}</SelectItem>
-                    <SelectItem value="en">{t('lang.en')}</SelectItem>
+                    <SelectItem value="he" className="touch-target">{t('lang.he')}</SelectItem>
+                    <SelectItem value="en" className="touch-target">{t('lang.en')}</SelectItem>
+                    <SelectItem value="ru" className="touch-target">{t('lang.ru')}</SelectItem>
+                    <SelectItem value="ar" className="touch-target">{t('lang.ar')}</SelectItem>
+                    <SelectItem value="es" className="touch-target">{t('lang.es')}</SelectItem>
+                    <SelectItem value="fr" className="touch-target">{t('lang.fr')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label>{t('writing.tagsField')}</Label>
+                <Label className="text-sm font-medium">{t('writing.tagsField')}</Label>
                 <div className="flex gap-2">
                   <Input
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyDown={handleTagKeyDown}
                     placeholder={t('placeholder.tags')}
-                    className="flex-1"
+                    className="flex-1 touch-target rounded-button"
                     data-testid="input-tag"
                   />
                   <Button 
                     variant="outline" 
                     size="icon"
                     onClick={addTag}
+                    className="touch-target rounded-button"
                     data-testid="button-add-tag"
                   >
                     <Plus className="h-4 w-4" />
                   </Button>
                 </div>
                 {tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-2">
+                  <div className="flex flex-wrap gap-2 mt-3">
                     {tags.map(tag => (
                       <Badge 
                         key={tag} 
                         variant="secondary"
-                        className="gap-1"
+                        className="gap-1.5 px-3 py-1"
                       >
                         {tag}
                         <button
                           onClick={() => removeTag(tag)}
-                          className="hover:text-destructive"
+                          className="hover:text-destructive transition-colors"
                           data-testid={`button-remove-tag-${tag}`}
                         >
                           <X className="h-3 w-3" />
@@ -321,43 +416,36 @@ export default function WritingStudio() {
                 )}
               </div>
 
-              <div className="flex items-center justify-between pt-4 border-t">
-                <span className="text-sm">{t('writing.autoSave')}</span>
-                <Button
-                  variant={autoSaveEnabled ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setAutoSaveEnabled(!autoSaveEnabled)}
-                  data-testid="button-toggle-autosave"
-                >
-                  {autoSaveEnabled ? (
-                    <CheckCircle2 className="h-4 w-4" />
-                  ) : (
-                    <Clock className="h-4 w-4" />
-                  )}
-                </Button>
+              <div className="flex items-center justify-between pt-4 border-t border-border">
+                <span className="text-sm font-medium">{t('writing.autoSave')}</span>
+                <Switch
+                  checked={autoSaveEnabled}
+                  onCheckedChange={setAutoSaveEnabled}
+                  data-testid="switch-autosave"
+                />
               </div>
             </CardContent>
           </Card>
 
           {documents.length > 0 && (
-            <Card data-testid="card-recent-documents">
+            <Card className="shadow-card rounded-card" data-testid="card-recent-documents">
               <CardHeader>
                 <CardTitle className="text-base">
                   {uiLanguage === 'he' ? 'מסמכים אחרונים' : 'Recent Documents'}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   {documents.slice(0, 5).map(doc => (
                     <Button
                       key={doc.id}
                       variant={doc.id === documentId ? 'secondary' : 'ghost'}
-                      className="w-full justify-start gap-2 text-start"
+                      className="w-full justify-start gap-2.5 text-start touch-target rounded-button"
                       onClick={() => navigate(`/writing/${doc.id}`)}
                       data-testid={`button-recent-doc-${doc.id}`}
                     >
-                      <FileText className="h-4 w-4 flex-shrink-0" />
-                      <span className="truncate">{doc.title}</span>
+                      <FileText className="h-4 w-4 flex-shrink-0" strokeWidth={1.75} />
+                      <span className="truncate text-[15px]">{doc.title}</span>
                     </Button>
                   ))}
                 </div>
@@ -367,13 +455,13 @@ export default function WritingStudio() {
         </div>
 
         <div className="lg:col-span-3">
-          <Card className="h-full" data-testid="card-editor">
+          <Card className="h-full shadow-card rounded-card" data-testid="card-editor">
             <CardContent className="p-6 space-y-4">
               <Input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder={t('placeholder.title')}
-                className="text-xl font-semibold border-0 border-b rounded-none px-0 focus-visible:ring-0 focus-visible:border-primary"
+                className="text-xl font-semibold border-0 border-b-2 rounded-none px-0 py-2 focus-visible:ring-0 focus-visible:border-primary bg-transparent"
                 data-testid="input-title"
               />
               
