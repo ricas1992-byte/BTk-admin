@@ -31,9 +31,9 @@ const DOCUMENT_TYPES: DocumentType[] = ['BOOK', 'COURSE', 'DRAFT', 'STUDY', 'FOU
 
 function isContentEmpty(html: string): boolean {
   if (!html || !html.trim()) return true;
-  const div = document.createElement('div');
-  div.innerHTML = html;
-  return !div.textContent?.trim();
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  return !doc.body.textContent?.trim();
 }
 
 export default function WritingStudio() {
