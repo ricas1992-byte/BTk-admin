@@ -5,8 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import RichTextEditor from '@/components/RichTextEditor';
 import {
   Select,
   SelectContent,
@@ -28,6 +28,13 @@ import {
 import { useToast } from '@/hooks/use-toast';
 
 const DOCUMENT_TYPES: DocumentType[] = ['BOOK', 'COURSE', 'DRAFT', 'STUDY', 'FOUNDATION', 'PROMPT', 'NOTE'];
+
+function isContentEmpty(html: string): boolean {
+  if (!html || !html.trim()) return true;
+  const div = document.createElement('div');
+  div.innerHTML = html;
+  return !div.textContent?.trim();
+}
 
 export default function WritingStudio() {
   const params = useParams<{ id?: string }>();
@@ -128,7 +135,7 @@ export default function WritingStudio() {
     }
 
     autoSaveTimeoutRef.current = setTimeout(() => {
-      if (title.trim() && (content.trim() || documentId)) {
+      if (title.trim() && (!isContentEmpty(content) || documentId)) {
         saveDocument();
       }
     }, 3000);
@@ -216,7 +223,7 @@ export default function WritingStudio() {
           <Button 
             variant="outline" 
             onClick={exportDocument}
-            disabled={!content.trim()}
+            disabled={isContentEmpty(content)}
             data-testid="button-export"
           >
             <Download className="h-4 w-4 me-2" />
@@ -370,14 +377,12 @@ export default function WritingStudio() {
                 data-testid="input-title"
               />
               
-              <Textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
+              <RichTextEditor
+                content={content}
+                onChange={setContent}
                 placeholder={t('placeholder.content')}
-                className={`min-h-[60vh] resize-none text-base leading-relaxed ${
-                  language === 'he' ? 'rtl-text' : 'ltr-text'
-                }`}
-                data-testid="textarea-content"
+                direction={language === 'he' ? 'rtl' : 'ltr'}
+                data-testid="rich-editor"
               />
             </CardContent>
           </Card>
