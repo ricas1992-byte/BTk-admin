@@ -2,48 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
-/* LIGHT MODE */
+/* LIGHT MODE - Beyond the Keys Branding */
 :root {
   --button-outline: rgba(0,0,0, .10);
   --badge-outline: rgba(0,0,0, .05);
   --opaque-button-border-intensity: -8;
   --elevate-1: rgba(0,0,0, .03);
   --elevate-2: rgba(0,0,0, .08);
-  --background: 220 15% 97%;
-  --foreground: 220 20% 12%;
-  --border: 220 12% 88%;
-  --card: 220 15% 95%;
-  --card-foreground: 220 20% 12%;
-  --card-border: 220 12% 92%;
-  --sidebar: 220 15% 93%;
-  --sidebar-foreground: 220 20% 12%;
-  --sidebar-border: 220 12% 86%;
-  --sidebar-primary: 220 85% 40%;
-  --sidebar-primary-foreground: 220 15% 98%;
-  --sidebar-accent: 220 15% 89%;
-  --sidebar-accent-foreground: 220 20% 15%;
-  --sidebar-ring: 220 85% 40%;
-  --popover: 220 15% 91%;
-  --popover-foreground: 220 20% 12%;
-  --popover-border: 220 12% 84%;
-  --primary: 220 85% 40%;
-  --primary-foreground: 220 15% 98%;
-  --secondary: 220 10% 87%;
-  --secondary-foreground: 220 20% 15%;
-  --muted: 220 8% 89%;
-  --muted-foreground: 220 15% 35%;
-  --accent: 220 12% 90%;
-  --accent-foreground: 220 20% 15%;
+  --background: 220 25% 95%;
+  --foreground: 220 30% 15%;
+  --border: 220 15% 85%;
+  --card: 0 0% 100%;
+  --card-foreground: 220 30% 15%;
+  --card-border: 220 15% 88%;
+  --sidebar: 222 47% 8%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-border: 222 40% 12%;
+  --sidebar-primary: 43 74% 52%;
+  --sidebar-primary-foreground: 0 0% 0%;
+  --sidebar-accent: 222 35% 14%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-ring: 43 74% 52%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 30% 15%;
+  --popover-border: 220 15% 88%;
+  --primary: 43 74% 52%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 220 15% 90%;
+  --secondary-foreground: 220 30% 15%;
+  --muted: 220 12% 92%;
+  --muted-foreground: 220 15% 40%;
+  --accent: 222 47% 10%;
+  --accent-foreground: 0 0% 100%;
   --destructive: 0 75% 42%;
   --destructive-foreground: 0 10% 98%;
   --input: 220 20% 55%;
-  --ring: 220 85% 40%;
-  --chart-1: 220 85% 35%;
-  --chart-2: 45 90% 40%;
+  --ring: 43 74% 52%;
+  --chart-1: 43 74% 52%;
+  --chart-2: 222 47% 30%;
   --chart-3: 180 70% 35%;
   --chart-4: 280 65% 38%;
   --chart-5: 30 80% 42%;
-  --font-sans: Open Sans, sans-serif;
+  --font-sans: "Open Sans", system-ui, -apple-system, sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: Menlo, monospace;
   --radius: .5rem;
@@ -57,6 +57,10 @@
   --shadow-2xl: 0px 2px 0px 0px hsl(220 15% 12% / 0.00);
   --tracking-normal: 0em;
   --spacing: 0.25rem;
+  --gold: 43 74% 52%;
+  --gold-hover: 43 65% 42%;
+  --navy-dark: 222 47% 8%;
+  --navy-light: 222 40% 12%;
 
 /* Fallback for older browsers */
   --sidebar-primary-border: hsl(var(--sidebar-primary));
@@ -87,43 +91,44 @@
   --destructive-border: hsl(from hsl(var(--destructive)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
 }
 
+/* DARK MODE - Beyond the Keys Branding (Default) */
 .dark {
   --button-outline: rgba(255,255,255, .10);
   --badge-outline: rgba(255,255,255, .05);
   --opaque-button-border-intensity: 9;
   --elevate-1: rgba(255,255,255, .04);
   --elevate-2: rgba(255,255,255, .09);
-  --background: 220 25% 8%;
-  --foreground: 220 15% 95%;
-  --border: 220 20% 18%;
-  --card: 220 25% 10%;
-  --card-foreground: 220 15% 95%;
-  --card-border: 220 20% 14%;
-  --sidebar: 220 25% 12%;
-  --sidebar-foreground: 220 15% 95%;
-  --sidebar-border: 220 20% 16%;
-  --sidebar-primary: 220 85% 45%;
-  --sidebar-primary-foreground: 220 15% 98%;
-  --sidebar-accent: 220 18% 16%;
-  --sidebar-accent-foreground: 220 15% 92%;
-  --sidebar-ring: 220 85% 45%;
-  --popover: 220 25% 14%;
-  --popover-foreground: 220 15% 95%;
-  --popover-border: 220 20% 18%;
-  --primary: 220 85% 45%;
-  --primary-foreground: 220 15% 98%;
-  --secondary: 220 18% 18%;
-  --secondary-foreground: 220 15% 92%;
-  --muted: 220 15% 16%;
+  --background: 222 47% 8%;
+  --foreground: 0 0% 95%;
+  --border: 222 35% 16%;
+  --card: 222 40% 12%;
+  --card-foreground: 0 0% 95%;
+  --card-border: 222 30% 18%;
+  --sidebar: 222 50% 6%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-border: 222 40% 12%;
+  --sidebar-primary: 43 74% 52%;
+  --sidebar-primary-foreground: 0 0% 0%;
+  --sidebar-accent: 222 35% 14%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-ring: 43 74% 52%;
+  --popover: 222 40% 12%;
+  --popover-foreground: 0 0% 95%;
+  --popover-border: 222 30% 18%;
+  --primary: 43 74% 52%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 222 30% 16%;
+  --secondary-foreground: 0 0% 92%;
+  --muted: 222 25% 14%;
   --muted-foreground: 220 15% 65%;
-  --accent: 220 15% 15%;
-  --accent-foreground: 220 15% 92%;
+  --accent: 222 35% 14%;
+  --accent-foreground: 0 0% 92%;
   --destructive: 0 75% 38%;
   --destructive-foreground: 0 10% 98%;
   --input: 220 30% 45%;
-  --ring: 220 85% 45%;
-  --chart-1: 220 85% 60%;
-  --chart-2: 45 95% 65%;
+  --ring: 43 74% 52%;
+  --chart-1: 43 74% 52%;
+  --chart-2: 222 60% 50%;
   --chart-3: 180 75% 60%;
   --chart-4: 280 70% 65%;
   --chart-5: 30 85% 62%;
@@ -135,6 +140,10 @@
   --shadow-lg: 0px 2px 0px 0px hsl(220 25% 95% / 0.00), 0px 4px 6px -1px hsl(220 25% 95% / 0.00);
   --shadow-xl: 0px 2px 0px 0px hsl(220 25% 95% / 0.00), 0px 8px 10px -1px hsl(220 25% 95% / 0.00);
   --shadow-2xl: 0px 2px 0px 0px hsl(220 25% 95% / 0.00);
+  --gold: 43 74% 52%;
+  --gold-hover: 43 65% 42%;
+  --navy-dark: 222 47% 8%;
+  --navy-light: 222 40% 12%;
 
 /* Fallback for older browsers */
   --sidebar-primary-border: hsl(var(--sidebar-primary));
@@ -170,8 +179,56 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
+  html.rtl {
+    direction: rtl;
+  }
+
+  html.ltr {
+    direction: ltr;
+  }
+
   body {
     @apply font-sans antialiased bg-background text-foreground;
+  }
+
+  .rtl-text {
+    direction: rtl;
+    text-align: right;
+  }
+
+  .ltr-text {
+    direction: ltr;
+    text-align: left;
+  }
+}
+
+@layer components {
+  .btn-gold {
+    @apply bg-primary text-primary-foreground font-bold px-4 py-2 rounded-md transition-colors;
+  }
+
+  .btn-gold:hover {
+    background-color: hsl(43 65% 42%);
+  }
+
+  .card-btk {
+    @apply bg-card text-card-foreground rounded-lg p-4 border border-card-border;
+  }
+
+  .sidebar-link {
+    @apply block py-3 px-4 text-sidebar-foreground/90 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 rounded-md transition-colors;
+  }
+
+  .sidebar-link.active {
+    @apply bg-sidebar-accent text-sidebar-foreground;
+  }
+
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
   }
 }
 
