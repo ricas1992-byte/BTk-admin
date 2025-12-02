@@ -20,12 +20,9 @@ if (isConfigured) {
   try {
     app = initializeApp(firebaseConfig);
     db = getFirestore(app);
-    console.log("Firebase initialized successfully");
-  } catch (error) {
-    console.warn("Firebase initialization failed:", error);
+  } catch {
+    // Firebase initialization failed silently - using local storage only
   }
-} else {
-  console.log("Firebase not configured - running in local-only mode. Add your Firebase config to enable cloud sync.");
 }
 
 export { db, isConfigured };
