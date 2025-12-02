@@ -1,4 +1,13 @@
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useRef, type ReactNode } from 'react';
+import { db, isConfigured as isFirebaseConfigured } from '../firebaseConfig';
+import { 
+  collection, 
+  doc, 
+  setDoc, 
+  deleteDoc,
+  onSnapshot,
+  type Unsubscribe
+} from 'firebase/firestore';
 
 export type DocumentType = 'BOOK' | 'COURSE' | 'DRAFT' | 'STUDY' | 'FOUNDATION' | 'PROMPT' | 'NOTE';
 export type TaskType = 'WRITING' | 'TRANSLATION' | 'LEARNING' | 'TECH';
@@ -816,6 +825,67 @@ function saveToStorage<T>(key: string, value: T): void {
   }
 }
 
+async function syncItemToFirestore<T extends { id: string }>(
+  collectionName: string, 
+  item: T
+): Promise<void> {
+  if (!isFirebaseConfigured || !db) return;
+  try {
+    await setDoc(doc(db, collectionName, item.id), item, { merge: true });
+  } catch (error) {
+    console.warn(`Failed to sync ${collectionName} item to Firestore:`, error);
+  }
+}
+
+async function deleteFromFirestore(
+  collectionName: string, 
+  itemId: string
+): Promise<void> {
+  if (!isFirebaseConfigured || !db) return;
+  try {
+    await deleteDoc(doc(db, collectionName, itemId));
+  } catch (error) {
+    console.warn(`Failed to delete from Firestore ${collectionName}:`, error);
+  }
+}
+
+async function syncCollectionToFirestore<T extends { id: string }>(
+  collectionName: string, 
+  items: T[]
+): Promise<void> {
+  if (!isFirebaseConfigured || !db) return;
+  try {
+    for (const item of items) {
+      await setDoc(doc(db, collectionName, item.id), item, { merge: true });
+    }
+  } catch (error) {
+    console.warn(`Failed to sync ${collectionName} to Firestore:`, error);
+  }
+}
+
+function subscribeToFirestore<T>(
+  collectionName: string, 
+  setter: (items: T[]) => void,
+  localStorageKey: string
+): Unsubscribe | null {
+  if (!isFirebaseConfigured || !db) return null;
+  try {
+    const colRef = collection(db, collectionName);
+    return onSnapshot(colRef, (snapshot) => {
+      if (!snapshot.empty) {
+        const items = snapshot.docs.map(doc => doc.data() as T);
+        setter(items);
+        saveToStorage(localStorageKey, items);
+      }
+    }, (error) => {
+      console.warn(`Firestore subscription error for ${collectionName}:`, error);
+    });
+  } catch (error) {
+    console.warn(`Failed to subscribe to ${collectionName}:`, error);
+    return null;
+  }
+}
+
 export function AppProvider({ children }: { children: ReactNode }) {
   const [documents, setDocuments] = useState<Document[]>(() => 
     loadFromStorage(STORAGE_KEYS.documents, [])
@@ -832,6 +902,52 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [uiLanguage, setUiLanguageState] = useState<Language>(() => 
     loadFromStorage(STORAGE_KEYS.language, 'he' as Language)
   );
+  
+  const initialSyncDone = useRef(false);
+
+  useEffect(() => {
+    if (!isFirebaseConfigured) return;
+    
+    const unsubscribers: (Unsubscribe | null)[] = [];
+    
+    unsubscribers.push(
+      subscribeToFirestore<Document>('documents', setDocuments, STORAGE_KEYS.documents)
+    );
+    unsubscribers.push(
+      subscribeToFirestore<Course>('courses', setCourses, STORAGE_KEYS.courses)
+    );
+    unsubscribers.push(
+      subscribeToFirestore<Task>('tasks', setTasks, STORAGE_KEYS.tasks)
+    );
+    unsubscribers.push(
+      subscribeToFirestore<LearningProgress>('learning', setLearningProgress, STORAGE_KEYS.learning)
+    );
+    
+    if (!initialSyncDone.current) {
+      initialSyncDone.current = true;
+      const localDocs = loadFromStorage<Document[]>(STORAGE_KEYS.documents, []);
+      const localCourses = loadFromStorage<Course[]>(STORAGE_KEYS.courses, []);
+      const localTasks = loadFromStorage<Task[]>(STORAGE_KEYS.tasks, []);
+      const localLearning = loadFromStorage<LearningProgress[]>(STORAGE_KEYS.learning, []);
+      
+      if (localDocs.length > 0) {
+        syncCollectionToFirestore('documents', localDocs);
+      }
+      if (localCourses.length > 0) {
+        syncCollectionToFirestore('courses', localCourses);
+      }
+      if (localTasks.length > 0) {
+        syncCollectionToFirestore('tasks', localTasks);
+      }
+      if (localLearning.length > 0) {
+        syncCollectionToFirestore('learning', localLearning.map(lp => ({ ...lp, id: lp.courseId })));
+      }
+    }
+    
+    return () => {
+      unsubscribers.forEach(unsub => unsub?.());
+    };
+  }, []);
 
   useEffect(() => {
     saveToStorage(STORAGE_KEYS.documents, documents);
@@ -879,17 +995,26 @@ export function AppProvider({ children }: { children: ReactNode }) {
       updatedAt: now,
     };
     setDocuments(prev => [...prev, newDoc]);
+    syncItemToFirestore('documents', newDoc);
     return newDoc;
   }, []);
 
   const updateDocument = useCallback((id: string, updates: Partial<Omit<Document, 'id' | 'createdAt'>>) => {
-    setDocuments(prev => prev.map(doc => 
-      doc.id === id ? { ...doc, ...updates, updatedAt: new Date().toISOString() } : doc
-    ));
+    setDocuments(prev => {
+      const updated = prev.map(doc => 
+        doc.id === id ? { ...doc, ...updates, updatedAt: new Date().toISOString() } : doc
+      );
+      const updatedDoc = updated.find(d => d.id === id);
+      if (updatedDoc) {
+        syncItemToFirestore('documents', updatedDoc);
+      }
+      return updated;
+    });
   }, []);
 
   const deleteDocument = useCallback((id: string) => {
     setDocuments(prev => prev.filter(doc => doc.id !== id));
+    deleteFromFirestore('documents', id);
   }, []);
 
   const getDocument = useCallback((id: string) => {
@@ -902,18 +1027,28 @@ export function AppProvider({ children }: { children: ReactNode }) {
       id: generateId(),
     };
     setCourses(prev => [...prev, newCourse]);
+    syncItemToFirestore('courses', newCourse);
     return newCourse;
   }, []);
 
   const updateCourse = useCallback((id: string, updates: Partial<Omit<Course, 'id'>>) => {
-    setCourses(prev => prev.map(course => 
-      course.id === id ? { ...course, ...updates } : course
-    ));
+    setCourses(prev => {
+      const updated = prev.map(course => 
+        course.id === id ? { ...course, ...updates } : course
+      );
+      const updatedCourse = updated.find(c => c.id === id);
+      if (updatedCourse) {
+        syncItemToFirestore('courses', updatedCourse);
+      }
+      return updated;
+    });
   }, []);
 
   const deleteCourse = useCallback((id: string) => {
     setCourses(prev => prev.filter(course => course.id !== id));
     setLearningProgress(prev => prev.filter(lp => lp.courseId !== id));
+    deleteFromFirestore('courses', id);
+    deleteFromFirestore('learning', id);
   }, []);
 
   const getCourse = useCallback((id: string) => {
@@ -926,27 +1061,40 @@ export function AppProvider({ children }: { children: ReactNode }) {
       id: generateId(),
     };
     setTasks(prev => [...prev, newTask]);
+    syncItemToFirestore('tasks', newTask);
     return newTask;
   }, []);
 
   const updateTask = useCallback((id: string, updates: Partial<Omit<Task, 'id'>>) => {
-    setTasks(prev => prev.map(task => 
-      task.id === id ? { ...task, ...updates } : task
-    ));
+    setTasks(prev => {
+      const updated = prev.map(task => 
+        task.id === id ? { ...task, ...updates } : task
+      );
+      const updatedTask = updated.find(t => t.id === id);
+      if (updatedTask) {
+        syncItemToFirestore('tasks', updatedTask);
+      }
+      return updated;
+    });
   }, []);
 
   const deleteTask = useCallback((id: string) => {
     setTasks(prev => prev.filter(task => task.id !== id));
+    deleteFromFirestore('tasks', id);
   }, []);
 
   const updateLearningProgress = useCallback((courseId: string, completedUnits: string[]) => {
     setLearningProgress(prev => {
       const existing = prev.find(lp => lp.courseId === courseId);
+      const updatedProgress = { courseId, completedUnits, id: courseId };
       if (existing) {
-        return prev.map(lp => 
+        const updated = prev.map(lp => 
           lp.courseId === courseId ? { ...lp, completedUnits } : lp
         );
+        syncItemToFirestore('learning', updatedProgress);
+        return updated;
       }
+      syncItemToFirestore('learning', updatedProgress);
       return [...prev, { courseId, completedUnits }];
     });
   }, []);
@@ -981,18 +1129,22 @@ export function AppProvider({ children }: { children: ReactNode }) {
       if (data.documents && Array.isArray(data.documents)) {
         setDocuments(data.documents);
         saveToStorage(STORAGE_KEYS.documents, data.documents);
+        syncCollectionToFirestore('documents', data.documents);
       }
       if (data.courses && Array.isArray(data.courses)) {
         setCourses(data.courses);
         saveToStorage(STORAGE_KEYS.courses, data.courses);
+        syncCollectionToFirestore('courses', data.courses);
       }
       if (data.tasks && Array.isArray(data.tasks)) {
         setTasks(data.tasks);
         saveToStorage(STORAGE_KEYS.tasks, data.tasks);
+        syncCollectionToFirestore('tasks', data.tasks);
       }
       if (data.learningProgress && Array.isArray(data.learningProgress)) {
         setLearningProgress(data.learningProgress);
         saveToStorage(STORAGE_KEYS.learning, data.learningProgress);
+        syncCollectionToFirestore('learning', data.learningProgress.map((lp: LearningProgress) => ({ ...lp, id: lp.courseId })));
       }
       if (data.uiLanguage && (data.uiLanguage === 'he' || data.uiLanguage === 'en')) {
         setUiLanguageState(data.uiLanguage);
@@ -1006,6 +1158,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const clearAllData = useCallback(() => {
+    documents.forEach(doc => deleteFromFirestore('documents', doc.id));
+    courses.forEach(course => {
+      deleteFromFirestore('courses', course.id);
+      deleteFromFirestore('learning', course.id);
+    });
+    tasks.forEach(task => deleteFromFirestore('tasks', task.id));
+    
     setDocuments([]);
     setCourses([]);
     setTasks([]);
@@ -1014,7 +1173,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     saveToStorage(STORAGE_KEYS.courses, []);
     saveToStorage(STORAGE_KEYS.tasks, []);
     saveToStorage(STORAGE_KEYS.learning, []);
-  }, []);
+  }, [documents, courses, tasks]);
 
   const value: AppContextType = {
     documents,
