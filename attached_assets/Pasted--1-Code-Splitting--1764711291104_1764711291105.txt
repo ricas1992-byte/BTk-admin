@@ -1,0 +1,77 @@
+בצע את הפעולות הבאות באפליקציה:
+
+1. **שפר ביצועים ומהירות טעינה**
+   - בצע Code Splitting: חלק את הקוד לרכיבים נטענים לפי דרישה (Dynamic Import).
+   - העבר כל לוגיקה כבדה (כמו Fetch/DB/Parsing) ל-useEffect אסינכרוני לאחר הצגת ה-UI הראשוני.
+   - ודא שאין רינדורים כפולים מיותרים – הוסף React.memo ו-useCallback היכן שנדרש.
+   - הפחת שימוש ב-console.log בקוד Production.
+   - השתמש ב-Lazy Loading לכל קומפוננטה שאינה חלק ממסך הבית.
+   - מזער קבצי CSS/JS אם אפשר (Vite/Parcel/Webpack).
+
+2. **הוסף מסך טעינה איכותי**
+   יצירת Splash Screen:
+   - צור קובץ חדש בשם: `LoadingScreen.jsx`
+   - הוסף בו:
+       • רקע לבן  
+       • לוגו (כפי שקיים בפרויקט) במרכז  
+       • Progress Bar אופקי שתופס % מהמסך  
+       • אחוז התקדמות מספרי (0–100)
+
+   התנהגות:
+   - מסך הטעינה מוצג מיד עם עליית האפליקציה.
+   - בזמן הטעינה, בצע Preload לרכיבים/משאבים:  
+       • fetch initial data  
+       • preload images  
+       • preload fonts  
+       • load static assets  
+   - כל משימה תעלה את ערך ה-progress בהתאם (חלק שווה בין המשימות).
+
+3. **שלב את מסך הטעינה באפליקציה**
+   - צור state גלובלי: `loadingProgress` ו-`isLoading`
+   - ב-App.jsx:
+       • אם isLoading === true → הצג <LoadingScreen />  
+       • אם isLoading === false → הצג את האפליקציה הרגילה  
+   - לאחר שהפרוגרס מגיע ל-100% → בצע fade-out ולאחריו החלף למסכי האפליקציה.
+
+4. **Progress Bar (קוד לדוגמה — התאם לפרויקט)**
+   - צור בתוך LoadingScreen:
+       ```
+       const [progress, setProgress] = useState(0);
+
+       useEffect(() => {
+         const tasks = [
+           preloadImages(),
+           preloadFonts(),
+           loadInitialData(),
+           preloadComponents(),
+         ];
+
+         let completed = 0;
+         tasks.forEach(task => {
+           task.then(() => {
+             completed++;
+             setProgress(Math.floor((completed / tasks.length) * 100));
+           });
+         });
+       }, []);
+       ```
+   - העיצוב:
+       • בר התקדמות כחול בהיר  
+       • קונטיינר מעוגל  
+       • מספר אחוזים מתחת ל-bar  
+
+5. **בצע אופטימיזציה לקבצים סטטיים**
+   - כווץ תמונות ל-WebP
+   - ודא שהלוגו קטן מ-150kb
+   - הוצא ספריות כבדות לקוד נטען דינמית
+
+6. **בדיקות**
+   - ודא שהאפליקציה נטענת תוך פחות מ-1.5 שניות באייפון.  
+   - ודא שאין קפיצות בין המסכים.  
+   - ודא שה-Progress Bar עולה בצורה חלקה (לא בקפיצות חדות).  
+   - ודא שה-Splash מתנקה מבלי להשאיר רענון מסך.
+
+7. **פריסה**
+   - עדכן את הגרסה, בנה מחדש (npm run build), ודא שהקבצים מינימליים.  
+   - העלה את הגרסה החדשה כך שהדפדפן לא יזכור Cache ישן:  
+       • הוסף query string לגרסה: `?v=2`  
