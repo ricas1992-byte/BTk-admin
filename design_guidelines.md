@@ -1,7 +1,7 @@
 # Design Guidelines: Beyond the Keys Management System
 
 ## Design Philosophy
-A professional, minimalist productivity platform optimized for iOS/iPad/iPhone with bilingual RTL/LTR support. The design emphasizes clarity, efficiency, and accessibility with a sophisticated dark theme and gold accents.
+A professional, minimalist productivity platform optimized for iOS/iPad/iPhone with bilingual RTL/LTR support. The design emphasizes clarity, efficiency, and accessibility with a clean light theme and gold accents.
 
 ## Brand Identity
 **Logo Integration**: Beyond the Keys logo (dark blue and gold, featuring keyboard with rising graph motif)
@@ -9,37 +9,39 @@ A professional, minimalist productivity platform optimized for iOS/iPad/iPhone w
 - Include in main header at 40px height
 - Logo path: `/public/logo.png`
 
-## Color System
+## Color System (Light Mode)
 ```
-Primary Background: #0B1220 (Deep Navy)
-Secondary Background: #0F162A (Sidebar Navy)
-Header Background: #111827 (Charcoal)
+Primary Background: #FFFFFF (White)
+Sidebar Background: #FAFAFA (Light Gray)
+Header Background: #FFFFFF (White)
 Card Background: #FFFFFF (White)
 Primary Accent: #D4AF37 (Gold)
 Accent Hover: #b9972f (Deep Gold)
-Text Primary: #111827 (Dark Gray)
+Text Primary: #1e293b (Dark Slate)
 Text Muted: #6B7280 (Medium Gray)
+Border Color: #E5E7EB (Light Border)
 ```
 
 ## Layout Architecture
 
 **Sidebar Navigation** (260px fixed width):
-- Dark navy background (#0F162A)
+- Light gray background (#FAFAFA)
 - Logo at top, centered
-- Navigation links with subtle dividers (1px rgba white 0.1)
+- Navigation links with subtle dividers (1px border)
 - Full viewport height
-- White text throughout
+- Dark text on light background
+- Right border (LTR) or left border (RTL) for visual separation
 
 **Main Content Area**:
-- Dark background (#0B1220)
+- White background (#FFFFFF)
 - Content cards on white background with 10px border-radius
 - 16px padding within cards, 20px margin between
 
 **Header**:
-- Full width, charcoal background (#111827)
+- Full width, white background (#FFFFFF)
 - 12px vertical, 20px horizontal padding
 - Logo (40px height) + language selector flexbox layout
-- White text
+- Dark text with bottom border
 
 ## Typography
 - System fonts: system-ui, -apple-system, Segoe UI, Arial
@@ -69,9 +71,9 @@ Use Tailwind spacing: 2, 4, 8, 12, 16, 20, 24 (in px equivalents)
 - Clean, minimal shadows
 
 **Navigation Links**:
-- White text on dark backgrounds
+- Dark text on light backgrounds
 - 10px vertical padding
-- Bottom border dividers
+- Hover state with subtle gray background
 - No text decoration
 
 ## Screen Layouts
@@ -103,21 +105,22 @@ Use Tailwind spacing: 2, 4, 8, 12, 16, 20, 24 (in px equivalents)
 - No heavy external libraries
 
 ## Accessibility & Internationalization
-- Full RTL support for Hebrew (default)
-- LTR support for English
-- Language toggle in header
+- Full RTL support for Hebrew (default) and Arabic
+- LTR support for English, Russian, Spanish, French
+- Language toggle in header and sidebar
 - Apply `dir` and `class` attributes to `<html>` element based on language
-- High contrast text (white on dark, dark on white)
+- High contrast text (dark text on light backgrounds)
 
 ## Interactive States
 - Button hover: Darken gold accent
 - No complex animations (lightweight for iOS)
 - Focus states for keyboard navigation
 - Clear visual feedback for all actions
+- Subtle elevation on hover for interactive elements
 
 ## Key UX Principles
 1. **Offline-First**: All data in LocalStorage, no server dependency
-2. **Bilingual**: Seamless language switching with proper RTL/LTR handling
+2. **Multilingual**: 6-language support with proper RTL/LTR handling
 3. **Touch-Optimized**: Large buttons, generous spacing for mobile interactions
 4. **Minimalist**: Clean, distraction-free interface focused on productivity
-5. **Professional**: Sophisticated dark theme with gold accents reflecting brand identity
+5. **Professional**: Clean light theme with gold accents reflecting brand identity

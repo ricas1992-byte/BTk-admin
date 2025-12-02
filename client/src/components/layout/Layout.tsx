@@ -46,8 +46,8 @@ export function Layout({ children }: LayoutProps) {
       <aside 
         className={`
           fixed inset-y-0 z-50 flex w-64 flex-col bg-sidebar text-sidebar-foreground
-          transition-transform duration-300 ease-in-out
-          ${uiLanguage === 'he' ? 'right-0' : 'left-0'}
+          transition-transform duration-300 ease-in-out border-sidebar-border
+          ${uiLanguage === 'he' ? 'right-0 border-l' : 'left-0 border-r'}
           ${sidebarOpen ? 'translate-x-0' : (uiLanguage === 'he' ? 'translate-x-full' : '-translate-x-full')}
           lg:relative lg:translate-x-0
         `}
@@ -161,7 +161,7 @@ export function Layout({ children }: LayoutProps) {
       )}
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <header className="flex items-center justify-between gap-4 px-4 py-3 bg-accent border-b border-border lg:px-6">
+        <header className="flex items-center justify-between gap-4 px-4 py-3 bg-background border-b border-border lg:px-6">
           <Button
             variant="ghost"
             size="icon"

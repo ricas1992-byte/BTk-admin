@@ -55,11 +55,14 @@ client/src/
 └── App.tsx                 # Main app with routing
 ```
 
-## Brand Colors
-- Primary Background: #0B1220 (Deep Navy)
-- Sidebar: #0F162A (Sidebar Navy)
+## Brand Colors (Light Mode)
+- Primary Background: #FFFFFF (White)
+- Sidebar: #FAFAFA (Light Gray)
+- Header: #FFFFFF (White)
 - Gold Accent: #D4AF37
 - Gold Hover: #b9972f
+- Text Primary: #1e293b (Dark Slate)
+- Border: #E5E7EB (Light Border)
 
 ## Running the Project
 ```bash
@@ -74,3 +77,4 @@ npm run dev
 - TipTap rich text editor with full formatting capabilities
 - Learning Analytics with visual progress charts (pie chart, bar chart)
 - Data backup system with export/import/clear functionality
+- Switched to full Light Mode theme (white backgrounds, light gray sidebar, dark text)
