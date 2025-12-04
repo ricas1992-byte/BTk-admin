@@ -2,19 +2,25 @@ import { useRef } from 'react';
 import { useApp } from '@/context/AppContext';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { 
-  Download, 
-  Upload, 
-  Trash2, 
-  FileText, 
-  BookOpen, 
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import {
+  Download,
+  Upload,
+  Trash2,
+  FileText,
+  BookOpen,
   CheckSquare,
   Database,
   AlertTriangle,
   HardDrive,
-  Cloud
+  Cloud,
+  Moon,
+  Sun,
+  Palette
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useTheme } from 'next-themes';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,16 +34,17 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export default function Settings() {
-  const { 
-    t, 
-    documents, 
-    courses, 
-    tasks, 
-    exportAllData, 
-    importAllData, 
-    clearAllData 
+  const {
+    t,
+    documents,
+    courses,
+    tasks,
+    exportAllData,
+    importAllData,
+    clearAllData
   } = useApp();
   const { toast } = useToast();
+  const { theme, setTheme } = useTheme();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleExport = () => {
@@ -106,6 +113,45 @@ export default function Settings() {
       </h1>
 
       <div className="grid gap-6 md:grid-cols-2">
+        {/* Appearance Card */}
+        <Card className="shadow-card rounded-card" data-testid="card-appearance">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2.5 text-lg">
+              <div className="p-2 rounded-full bg-pastel-rose">
+                <Palette className="h-4 w-4 text-primary" strokeWidth={1.75} />
+              </div>
+              {t('settings.appearance')}
+            </CardTitle>
+            <CardDescription>
+              {t('settings.appearanceDescription')}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between p-4 rounded-card bg-muted/50">
+              <div className="flex items-center gap-3">
+                {theme === 'dark' ? (
+                  <Moon className="h-5 w-5 text-primary" strokeWidth={1.75} />
+                ) : (
+                  <Sun className="h-5 w-5 text-primary" strokeWidth={1.75} />
+                )}
+                <div>
+                  <Label className="font-medium text-base">
+                    {t('settings.darkMode')}
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    {t('settings.darkModeDescription')}
+                  </p>
+                </div>
+              </div>
+              <Switch
+                checked={theme === 'dark'}
+                onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')}
+                data-testid="switch-dark-mode"
+              />
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Statistics Card */}
         <Card className="shadow-card rounded-card" data-testid="card-statistics">
           <CardHeader>
