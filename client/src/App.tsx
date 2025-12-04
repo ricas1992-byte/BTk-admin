@@ -8,6 +8,7 @@ import { Layout } from "@/components/layout/Layout";
 import { lazy, Suspense, useState, useCallback, memo } from "react";
 import LoadingScreen from "@/components/LoadingScreen";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { ThemeProvider } from "next-themes";
 
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const Documents = lazy(() => import("@/pages/Documents"));
@@ -55,14 +56,16 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AppProvider>
-        <TooltipProvider>
-          <Layout>
-            <Router />
-          </Layout>
-          <Toaster />
-        </TooltipProvider>
-      </AppProvider>
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <AppProvider>
+          <TooltipProvider>
+            <Layout>
+              <Router />
+            </Layout>
+            <Toaster />
+          </TooltipProvider>
+        </AppProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
