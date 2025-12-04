@@ -1,3 +1,5 @@
+// UPDATED: UI enhancement - Loading screen with craft-style premium design
+// High-end loading experience with smooth transitions and professional aesthetics
 import { useState, useEffect, useCallback, memo } from 'react';
 import { Progress } from '@/components/ui/progress';
 
@@ -119,25 +121,35 @@ const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: Loading
       }`}
       data-testid="loading-screen"
     >
-      <div className="flex flex-col items-center gap-8 w-full max-w-xs px-6">
+      {/* UPDATED: Enhanced loading container with craft-style animation */}
+      <div className="flex flex-col items-center gap-8 w-full max-w-xs px-6 animate-fade-in">
+        {/* UPDATED: Logo with subtle hover effect and title */}
         <div className="flex flex-col items-center gap-4">
           <img
             src="/logo.png"
             alt="Beyond the Keys"
-            className="h-20 w-auto object-contain"
+            className="h-24 w-auto object-contain transition-transform hover:scale-105"
             data-testid="loading-logo"
           />
+          <h2 className="text-xl font-semibold tracking-tight text-foreground">
+            Beyond the Keys
+          </h2>
         </div>
 
+        {/* UPDATED: Progress bar with craft-style shadow and radius */}
         <div className="w-full space-y-3">
-          <Progress 
-            value={progress} 
-            className="h-2 w-full bg-muted"
+          <Progress
+            value={progress}
+            className="h-2.5 w-full bg-muted shadow-sm"
+            style={{
+              boxShadow: 'var(--shadow-sm)',
+              borderRadius: 'var(--radius-button)'
+            }}
             data-testid="loading-progress-bar"
           />
           <div className="text-center">
-            <span 
-              className="text-lg font-medium text-primary tabular-nums"
+            <span
+              className="text-xl font-semibold text-primary tabular-nums"
               data-testid="loading-progress-percent"
             >
               {progress}%
@@ -145,11 +157,12 @@ const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: Loading
           </div>
         </div>
 
+        {/* UPDATED: Loading status with craft-style spinner */}
         <div className="h-6">
           {progress < 100 && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
               <div className="spinner-craft h-4 w-4" />
-              <span className="text-sm text-muted-foreground">
+              <span className="text-sm text-muted-foreground font-medium">
                 {progress < 20 && 'Loading assets...'}
                 {progress >= 20 && progress < 40 && 'Loading images...'}
                 {progress >= 40 && progress < 60 && 'Preparing fonts...'}
@@ -159,7 +172,7 @@ const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: Loading
             </div>
           )}
           {progress === 100 && (
-            <span className="text-sm text-primary font-medium">Ready!</span>
+            <span className="text-sm text-primary font-semibold animate-fade-in">✓ Ready!</span>
           )}
         </div>
       </div>
