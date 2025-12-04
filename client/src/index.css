@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* BTK Official Animation System - Import ONLY */
+@import './btk-animations.css';
+
 /* NAVY/GOLD/WHITE HIGH-END PREMIUM UI - LIGHT MODE */
 :root {
   --button-outline: rgba(0,0,0, .08);
@@ -271,9 +274,9 @@
 }
 
 @layer components {
-  /* Craft-style primary button */
+  /* Craft-style primary button with BTK tap interaction */
   .btn-craft {
-    @apply bg-primary text-primary-foreground font-medium px-5 py-2.5 transition-all duration-150;
+    @apply bg-primary text-primary-foreground font-medium px-5 py-2.5 transition-all duration-150 btk-tap-scale;
     border-radius: var(--radius-button);
   }
 
@@ -281,20 +284,16 @@
     transform: scale(1.02);
     box-shadow: 0 4px 12px hsl(var(--primary) / 0.25);
   }
-  
-  .btn-craft:active {
-    transform: scale(0.98);
-  }
 
-  /* Craft-style card */
+  /* Craft-style card with BTK entry animation */
   .card-craft {
-    @apply bg-card text-card-foreground p-5;
+    @apply bg-card text-card-foreground p-5 btk-fade-in-up;
     border-radius: var(--radius-card);
     box-shadow: var(--shadow-card);
     border: 1px solid hsl(var(--border));
     transition: box-shadow 0.2s ease, transform 0.15s ease;
   }
-  
+
   .card-craft:hover {
     box-shadow: 0 8px 28px rgba(0,0,0,0.06);
     transform: translateY(-1px);
@@ -362,20 +361,16 @@
     @apply min-h-[44px];
   }
   
-  /* Icon button - Craft style */
+  /* Icon button - Craft style with BTK tap interaction */
   .btn-icon-craft {
-    @apply flex items-center justify-center rounded-full transition-all duration-150;
+    @apply flex items-center justify-center rounded-full transition-all duration-150 btk-tap-scale;
     width: 42px;
     height: 42px;
   }
-  
+
   .btn-icon-craft:hover {
     @apply bg-muted;
     transform: scale(1.05);
-  }
-  
-  .btn-icon-craft:active {
-    transform: scale(0.95);
   }
 
   /* Loading spinner - Pastel */
@@ -407,18 +402,6 @@
     font-size: 1.125rem;
     line-height: 1.8;
     color: hsl(var(--foreground));
-  }
-  
-  /* Page transitions */
-  .page-enter {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  
-  .page-enter-active {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 150ms ease, transform 150ms ease;
   }
   
   /* Breadcrumb styling */
@@ -519,54 +502,6 @@
   .border.hover-elevate-2:not(.no-hover-interaction-elevate)::after,
   .border.active-elevate-2:not(.no-active-interaction-elevate)::after {
     inset: -1px;
-  }
-  
-  /* Micro-animation utilities */
-  .animate-fade-in {
-    animation: fadeIn 150ms ease forwards;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(4px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .animate-scale-in {
-    animation: scaleIn 150ms ease forwards;
-  }
-
-  @keyframes scaleIn {
-    from {
-      opacity: 0;
-      transform: scale(0.96);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  .animate-spin-slow {
-    animation: spin 1.2s linear infinite;
-  }
-
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  .duration-400 {
-    transition-duration: 400ms;
   }
 
   /* Navy/Gold background utilities */

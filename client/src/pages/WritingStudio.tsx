@@ -203,8 +203,8 @@ export default function WritingStudio() {
 
   if (focusMode) {
     return (
-      <div 
-        className="focus-mode animate-fade-in"
+      <div
+        className="focus-mode btk-fade-in-up"
         data-testid="focus-mode-container"
       >
         <div className="h-full flex flex-col">

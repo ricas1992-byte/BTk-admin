@@ -105,7 +105,7 @@ const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: Loading
 
       const completeTimer = setTimeout(() => {
         onLoadingComplete();
-      }, 600);
+      }, 550);
 
       return () => {
         clearTimeout(fadeTimer);
@@ -116,13 +116,13 @@ const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: Loading
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-background transition-opacity duration-400 ${
-        fadeOut ? 'opacity-0' : 'opacity-100'
+      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-background ${
+        fadeOut ? 'btk-app-intro' : ''
       }`}
       data-testid="loading-screen"
     >
-      {/* UPDATED: Enhanced loading container with craft-style animation */}
-      <div className="flex flex-col items-center gap-8 w-full max-w-xs px-6 animate-fade-in">
+      {/* BTK Official: Loading container with btk-fade-in-up animation */}
+      <div className="flex flex-col items-center gap-8 w-full max-w-xs px-6 btk-fade-in-up">
         {/* UPDATED: Logo with subtle hover effect and title */}
         <div className="flex flex-col items-center gap-4">
           <img
@@ -172,7 +172,7 @@ const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: Loading
             </div>
           )}
           {progress === 100 && (
-            <span className="text-sm text-primary font-semibold animate-fade-in">✓ Ready!</span>
+            <span className="text-sm text-primary font-semibold btk-fade-in-up">✓ Ready!</span>
           )}
         </div>
       </div>
