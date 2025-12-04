@@ -112,25 +112,48 @@ box-shadow: 0 4px 12px rgba(0,0,0,0.03)
 padding: 12px 24px
 ```
 
-## Micro-Animations
+## BTK Official Animation System
 
-### Page Transitions
+### System Overview
+The BTK system uses **ONLY THREE** official animations. No other animations are permitted.
+
+### 1. App Intro Animation (btk-app-intro)
+**Usage:** Loading screen fade-out only
 ```css
-animation: fadeIn 150ms ease forwards;
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+/* 350ms fade-out, ease-out */
+.btk-app-intro
 ```
 
-### Button Hover
+### 2. Component Entry Animation (btk-fade-in-up)
+**Usage:** All components appearing on screen (tasks, cards, documents, grid items)
+```css
+/* 180ms fade-in + translateY(8px), cubic-bezier(0.25, 0.1, 0.25, 1.0) */
+.btk-fade-in-up
+```
+
+### 3. Micro Interaction Animation (btk-tap-scale)
+**Usage:** onClick/onTap for buttons, icons, cards, rows, tabs
+```css
+/* 120ms scale animation (1 → 0.96 → 1), ease-out, activated on :active */
+.btk-tap-scale
+```
+
+### Animation Rules
+1. ✅ Use ONLY the three official animations above
+2. ❌ NO page transitions
+3. ❌ NO mount animations on App level
+4. ❌ NO custom keyframes
+5. ✅ Standard CSS transitions (hover, focus) are allowed for styling
+6. ✅ Animations defined in `/client/src/btk-animations.css`
+
+### Button Hover (Styling, NOT Animation)
 ```css
 transition: transform 150ms ease;
 :hover { transform: scale(1.02); }
 :active { transform: scale(0.98); }
 ```
 
-### Card Hover
+### Card Hover (Styling, NOT Animation)
 ```css
 transition: box-shadow 200ms ease, transform 150ms ease;
 :hover {

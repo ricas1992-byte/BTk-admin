@@ -1,0 +1,93 @@
+/**
+ * BTK Official Animation System
+ * Beyond the Keys - Premium Animation Guidelines
+ *
+ * This file contains the ONLY THREE official animations for the BTK system.
+ * DO NOT add any other animations outside of this file.
+ * DO NOT modify these animations without explicit approval.
+ */
+
+/* ========================================================
+   1. App Intro Animation - btk-app-intro
+   ========================================================
+
+   Usage: Loading screen fade-out only
+   Duration: 350ms
+   Easing: ease-out
+*/
+
+@keyframes btk-app-intro {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.btk-app-intro {
+  animation: btk-app-intro 350ms ease-out forwards;
+}
+
+/* ========================================================
+   2. Component Entry Animation - btk-fade-in-up
+   ========================================================
+
+   Usage: All components appearing on screen (tasks, cards, documents, grid items)
+   Duration: 180ms
+   Easing: cubic-bezier(0.25, 0.1, 0.25, 1.0)
+*/
+
+@keyframes btk-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.btk-fade-in-up {
+  animation: btk-fade-in-up 180ms cubic-bezier(0.25, 0.1, 0.25, 1.0) forwards;
+}
+
+/* ========================================================
+   3. Micro Interaction Animation - btk-tap-scale
+   ========================================================
+
+   Usage: onClick/onTap for buttons, icons, cards, rows, tabs
+   Duration: 120ms
+   Easing: ease-out
+*/
+
+@keyframes btk-tap-scale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.96);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.btk-tap-scale:active {
+  animation: btk-tap-scale 120ms ease-out;
+}
+
+/* ========================================================
+   System Guidelines (DO NOT REMOVE)
+   ========================================================
+
+   1. Only use these three animations
+   2. App Intro: Loading screen ONLY
+   3. Component Entry: Components appearing on screen ONLY (not App/Layout)
+   4. Micro Interaction: onClick/onTap events ONLY
+   5. NO page transitions
+   6. NO mount animations on App level
+   7. NO additional keyframes
+   8. NO animations on body, html, or #root
+*/

@@ -219,8 +219,8 @@ export function Layout({ children }: LayoutProps) {
 
       {/* Sidebar Overlay */}
       {sidebarOpen && (
-        <div 
-          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden animate-fade-in"
+        <div
+          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden btk-fade-in-up"
           onClick={() => setSidebarOpen(false)}
           data-testid="sidebar-overlay"
         />
@@ -346,7 +346,7 @@ export function Layout({ children }: LayoutProps) {
 
         {/* Main Content */}
         <main className="flex-1 overflow-auto p-4 lg:p-6">
-          <div className="animate-fade-in">
+          <div className="btk-fade-in-up">
             {children}
           </div>
         </main>
