@@ -2,76 +2,76 @@
 @tailwind components;
 @tailwind utilities;
 
-/* C2 CRAFT HIGH-END PREMIUM PASTEL UI - LIGHT MODE */
+/* NAVY/GOLD/WHITE HIGH-END PREMIUM UI - LIGHT MODE */
 :root {
   --button-outline: rgba(0,0,0, .08);
   --badge-outline: rgba(0,0,0, .04);
   --opaque-button-border-intensity: -6;
   --elevate-1: rgba(0,0,0, .025);
   --elevate-2: rgba(0,0,0, .06);
-  
+
   /* Core backgrounds */
   --background: 0 0% 100%;
-  --foreground: 218 33% 17%;
-  --border: 30 10% 91%;
-  
-  /* Card styling */
+  --foreground: 220 60% 15%;
+  --border: 220 15% 88%;
+
+  /* Card styling - Clean white cards */
   --card: 0 0% 100%;
-  --card-foreground: 218 33% 17%;
-  --card-border: 30 10% 89%;
-  
-  /* Sidebar - Craft style soft background */
-  --sidebar: 30 14% 97%;
-  --sidebar-foreground: 218 33% 17%;
-  --sidebar-border: 30 10% 91%;
-  --sidebar-primary: 170 42% 52%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 170 42% 93%;
-  --sidebar-accent-foreground: 218 33% 17%;
-  --sidebar-ring: 170 42% 52%;
-  
+  --card-foreground: 220 60% 15%;
+  --card-border: 220 15% 90%;
+
+  /* Sidebar - Deep navy background */
+  --sidebar: 220 60% 20%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-border: 220 50% 25%;
+  --sidebar-primary: 45 95% 55%;
+  --sidebar-primary-foreground: 220 60% 15%;
+  --sidebar-accent: 220 55% 28%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-ring: 45 95% 55%;
+
   /* Popover */
   --popover: 0 0% 100%;
-  --popover-foreground: 218 33% 17%;
-  --popover-border: 30 10% 89%;
-  
-  /* Primary accent - Teal/Craft green */
-  --primary: 170 42% 52%;
-  --primary-foreground: 0 0% 100%;
-  
+  --popover-foreground: 220 60% 15%;
+  --popover-border: 220 15% 88%;
+
+  /* Primary accent - Rich gold */
+  --primary: 45 95% 55%;
+  --primary-foreground: 220 60% 15%;
+
   /* Secondary */
-  --secondary: 30 14% 95%;
-  --secondary-foreground: 218 33% 17%;
-  
+  --secondary: 220 20% 95%;
+  --secondary-foreground: 220 60% 15%;
+
   /* Muted */
-  --muted: 30 12% 96%;
-  --muted-foreground: 218 20% 46%;
-  
-  /* Accent */
-  --accent: 170 42% 93%;
-  --accent-foreground: 218 33% 17%;
-  
+  --muted: 220 15% 96%;
+  --muted-foreground: 220 30% 45%;
+
+  /* Accent - Light gold */
+  --accent: 45 90% 94%;
+  --accent-foreground: 220 60% 15%;
+
   /* Destructive */
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 100%;
-  
+
   /* Input */
-  --input: 30 15% 75%;
-  --ring: 170 42% 52%;
-  
-  /* Chart colors - Pastel palette */
-  --chart-1: 170 42% 52%;
-  --chart-2: 350 70% 85%;
-  --chart-3: 213 70% 85%;
-  --chart-4: 45 70% 88%;
-  --chart-5: 140 50% 88%;
-  
-  /* Craft pastel accents */
-  --pastel-rose: 0 70% 91%;
-  --pastel-blue: 213 70% 92%;
-  --pastel-beige: 45 55% 91%;
-  --pastel-green: 140 50% 92%;
-  --pastel-teal: 170 42% 93%;
+  --input: 220 20% 75%;
+  --ring: 45 95% 55%;
+
+  /* Chart colors - Navy/Gold palette */
+  --chart-1: 45 95% 55%;
+  --chart-2: 220 60% 65%;
+  --chart-3: 200 70% 70%;
+  --chart-4: 45 80% 75%;
+  --chart-5: 220 50% 80%;
+
+  /* Premium accent colors */
+  --navy-light: 220 50% 92%;
+  --navy-medium: 220 55% 65%;
+  --gold-light: 45 85% 88%;
+  --gold-accent: 45 90% 70%;
+  --white-soft: 0 0% 98%;
   
   /* Typography */
   --font-sans: "SF Pro Display", "SF Pro Text", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -121,64 +121,64 @@
   --destructive-border: hsl(from hsl(var(--destructive)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
 }
 
-/* DARK MODE - Craft Premium */
+/* DARK MODE - Navy/Gold Premium */
 .dark {
   --button-outline: rgba(255,255,255, .10);
   --badge-outline: rgba(255,255,255, .05);
   --opaque-button-border-intensity: 8;
   --elevate-1: rgba(255,255,255, .035);
   --elevate-2: rgba(255,255,255, .08);
-  
-  --background: 220 25% 10%;
-  --foreground: 30 20% 95%;
-  --border: 220 20% 18%;
-  
-  --card: 220 22% 13%;
-  --card-foreground: 30 20% 95%;
-  --card-border: 220 18% 20%;
-  
-  --sidebar: 220 28% 8%;
-  --sidebar-foreground: 30 20% 95%;
-  --sidebar-border: 220 20% 14%;
-  --sidebar-primary: 170 42% 52%;
-  --sidebar-primary-foreground: 0 0% 0%;
-  --sidebar-accent: 220 22% 16%;
-  --sidebar-accent-foreground: 30 20% 95%;
-  --sidebar-ring: 170 42% 52%;
-  
-  --popover: 220 22% 13%;
-  --popover-foreground: 30 20% 95%;
-  --popover-border: 220 18% 20%;
-  
-  --primary: 170 42% 52%;
-  --primary-foreground: 0 0% 0%;
-  
-  --secondary: 220 20% 18%;
-  --secondary-foreground: 30 18% 92%;
-  
-  --muted: 220 18% 15%;
-  --muted-foreground: 30 15% 60%;
-  
-  --accent: 220 22% 16%;
-  --accent-foreground: 30 18% 92%;
-  
+
+  --background: 220 45% 10%;
+  --foreground: 0 0% 95%;
+  --border: 220 30% 18%;
+
+  --card: 220 40% 13%;
+  --card-foreground: 0 0% 95%;
+  --card-border: 220 30% 20%;
+
+  --sidebar: 220 60% 8%;
+  --sidebar-foreground: 0 0% 95%;
+  --sidebar-border: 220 50% 14%;
+  --sidebar-primary: 45 95% 60%;
+  --sidebar-primary-foreground: 220 60% 10%;
+  --sidebar-accent: 220 50% 16%;
+  --sidebar-accent-foreground: 0 0% 95%;
+  --sidebar-ring: 45 95% 60%;
+
+  --popover: 220 40% 13%;
+  --popover-foreground: 0 0% 95%;
+  --popover-border: 220 30% 20%;
+
+  --primary: 45 95% 60%;
+  --primary-foreground: 220 60% 10%;
+
+  --secondary: 220 30% 18%;
+  --secondary-foreground: 0 0% 92%;
+
+  --muted: 220 30% 15%;
+  --muted-foreground: 220 15% 60%;
+
+  --accent: 220 40% 16%;
+  --accent-foreground: 0 0% 92%;
+
   --destructive: 0 70% 45%;
   --destructive-foreground: 0 10% 98%;
-  
-  --input: 220 20% 35%;
-  --ring: 170 42% 52%;
-  
-  --chart-1: 170 50% 55%;
-  --chart-2: 350 55% 65%;
-  --chart-3: 213 55% 65%;
-  --chart-4: 45 60% 65%;
-  --chart-5: 140 45% 55%;
-  
-  --pastel-rose: 350 40% 25%;
-  --pastel-blue: 213 40% 25%;
-  --pastel-beige: 45 30% 22%;
-  --pastel-green: 140 30% 22%;
-  --pastel-teal: 170 35% 20%;
+
+  --input: 220 25% 35%;
+  --ring: 45 95% 60%;
+
+  --chart-1: 45 95% 60%;
+  --chart-2: 220 60% 65%;
+  --chart-3: 200 70% 70%;
+  --chart-4: 45 80% 75%;
+  --chart-5: 220 50% 80%;
+
+  --navy-light: 220 40% 25%;
+  --navy-medium: 220 50% 45%;
+  --gold-light: 45 70% 40%;
+  --gold-accent: 45 85% 55%;
+  --white-soft: 220 30% 15%;
   
   --shadow-2xs: 0px 2px 0px 0px hsl(220 25% 95% / 0.00);
   --shadow-xs: 0px 2px 0px 0px hsl(220 25% 95% / 0.00);
@@ -300,30 +300,30 @@
     transform: translateY(-1px);
   }
 
-  /* Pastel card variants */
+  /* Navy/Gold card variants */
   .card-pastel-rose {
-    background-color: hsl(var(--pastel-rose));
-    border-color: hsl(var(--pastel-rose));
+    background-color: hsl(var(--gold-light));
+    border-color: hsl(var(--gold-light));
   }
-  
+
   .card-pastel-blue {
-    background-color: hsl(var(--pastel-blue));
-    border-color: hsl(var(--pastel-blue));
+    background-color: hsl(var(--navy-light));
+    border-color: hsl(var(--navy-light));
   }
-  
+
   .card-pastel-beige {
-    background-color: hsl(var(--pastel-beige));
-    border-color: hsl(var(--pastel-beige));
+    background-color: hsl(var(--gold-light));
+    border-color: hsl(var(--gold-light));
   }
-  
+
   .card-pastel-green {
-    background-color: hsl(var(--pastel-green));
-    border-color: hsl(var(--pastel-green));
+    background-color: hsl(var(--white-soft));
+    border-color: hsl(var(--border));
   }
-  
+
   .card-pastel-teal {
-    background-color: hsl(var(--pastel-teal));
-    border-color: hsl(var(--pastel-teal));
+    background-color: hsl(var(--accent));
+    border-color: hsl(var(--accent));
   }
 
   /* Craft-style sidebar link */
@@ -540,7 +540,7 @@
   .animate-scale-in {
     animation: scaleIn 150ms ease forwards;
   }
-  
+
   @keyframes scaleIn {
     from {
       opacity: 0;
@@ -567,6 +567,47 @@
 
   .duration-400 {
     transition-duration: 400ms;
+  }
+
+  /* Navy/Gold background utilities */
+  .bg-pastel-rose {
+    background-color: hsl(var(--gold-light));
+  }
+
+  .bg-pastel-blue {
+    background-color: hsl(var(--navy-light));
+  }
+
+  .bg-pastel-beige {
+    background-color: hsl(var(--gold-light));
+  }
+
+  .bg-pastel-green {
+    background-color: hsl(var(--white-soft));
+  }
+
+  .bg-pastel-teal {
+    background-color: hsl(var(--accent));
+  }
+
+  .border-pastel-rose {
+    border-color: hsl(var(--gold-light));
+  }
+
+  .border-pastel-blue {
+    border-color: hsl(var(--navy-light));
+  }
+
+  .border-pastel-beige {
+    border-color: hsl(var(--gold-light));
+  }
+
+  .border-pastel-green {
+    border-color: hsl(var(--border));
+  }
+
+  .border-pastel-teal {
+    border-color: hsl(var(--accent));
   }
   
   /* Highlight animation for navigation */
