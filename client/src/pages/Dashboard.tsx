@@ -45,7 +45,7 @@ function TaskItem({ task }: { task: Task }) {
 
   return (
     <div 
-      className="flex items-center gap-3 p-3.5 rounded-card bg-muted/40 hover:bg-muted/70 transition-all duration-150 cursor-pointer touch-target"
+      className="flex items-center gap-3 p-3.5 rounded-card bg-muted/40 hover:bg-muted/70  cursor-pointer touch-target"
       onClick={cycleStatus}
       data-testid={`task-item-${task.id}`}
     >
@@ -282,7 +282,7 @@ export default function Dashboard() {
                 {recentDocuments.map(doc => (
                   <Link key={doc.id} href={`/writing/${doc.id}`}>
                     <div 
-                      className="flex items-center gap-3 p-3.5 rounded-card bg-muted/40 hover:bg-muted/70 transition-all duration-150 cursor-pointer touch-target"
+                      className="flex items-center gap-3 p-3.5 rounded-card bg-muted/40 hover:bg-muted/70  cursor-pointer touch-target"
                       data-testid={`recent-doc-${doc.id}`}
                     >
                       <div className="p-2 rounded-full bg-pastel-teal">
@@ -331,7 +331,7 @@ export default function Dashboard() {
               {upcomingTasks.map(task => (
                 <div 
                   key={task.id}
-                  className="flex items-center gap-3 p-3 rounded-card bg-muted/40 hover:bg-muted/70 transition-all duration-150 cursor-pointer touch-target"
+                  className="flex items-center gap-3 p-3 rounded-card bg-muted/40 hover:bg-muted/70  cursor-pointer touch-target"
                   data-testid={`upcoming-task-${task.id}`}
                 >
                   <div className={`p-2 rounded-full ${

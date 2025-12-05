@@ -1,5 +1,3 @@
-// UPDATED: UI enhancement - Loading screen with craft-style premium design
-// High-end loading experience with smooth transitions and professional aesthetics
 import { useState, useEffect, useCallback, memo } from 'react';
 import { Progress } from '@/components/ui/progress';
 
@@ -15,7 +13,6 @@ interface PreloadTask {
 const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
   const [progress, setProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
-  const [fadeOut, setFadeOut] = useState(false);
 
   const preloadImage = useCallback((src: string): Promise<void> => {
     return new Promise((resolve) => {
@@ -69,16 +66,16 @@ const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: Loading
 
       for (const task of tasks) {
         if (!isMounted) return;
-        
+
         try {
           await task.execute();
         } catch {
           // Continue even if a task fails
         }
-        
+
         completedTasks++;
         const newProgress = Math.min(Math.floor((completedTasks / totalTasks) * 100), 100);
-        
+
         if (isMounted) {
           setProgress(newProgress);
         }
@@ -99,16 +96,11 @@ const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: Loading
 
   useEffect(() => {
     if (isComplete) {
-      const fadeTimer = setTimeout(() => {
-        setFadeOut(true);
-      }, 200);
-
       const completeTimer = setTimeout(() => {
         onLoadingComplete();
-      }, 550);
+      }, 200);
 
       return () => {
-        clearTimeout(fadeTimer);
         clearTimeout(completeTimer);
       };
     }
@@ -116,19 +108,15 @@ const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: Loading
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-background ${
-        fadeOut ? 'btk-app-intro' : ''
-      }`}
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-background"
       data-testid="loading-screen"
     >
-      {/* BTK Official: Loading container with btk-fade-in-up animation */}
-      <div className="flex flex-col items-center gap-8 w-full max-w-xs px-6 btk-fade-in-up">
-        {/* UPDATED: Logo with subtle hover effect and title */}
+      <div className="flex flex-col items-center gap-8 w-full max-w-xs px-6">
         <div className="flex flex-col items-center gap-4">
           <img
             src="/logo.png"
             alt="Beyond the Keys"
-            className="h-24 w-auto object-contain transition-transform hover:scale-105"
+            className="h-24 w-auto object-contain"
             data-testid="loading-logo"
           />
           <h2 className="text-xl font-semibold tracking-tight text-foreground">
@@ -136,7 +124,6 @@ const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: Loading
           </h2>
         </div>
 
-        {/* UPDATED: Progress bar with craft-style shadow and radius */}
         <div className="w-full space-y-3">
           <Progress
             value={progress}
@@ -157,11 +144,10 @@ const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: Loading
           </div>
         </div>
 
-        {/* UPDATED: Loading status with craft-style spinner */}
         <div className="h-6">
           {progress < 100 && (
             <div className="flex items-center gap-2.5">
-              <div className="spinner-craft h-4 w-4" />
+              <div className="spinner h-4 w-4" />
               <span className="text-sm text-muted-foreground font-medium">
                 {progress < 20 && 'Loading assets...'}
                 {progress >= 20 && progress < 40 && 'Loading images...'}
@@ -172,7 +158,7 @@ const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: Loading
             </div>
           )}
           {progress === 100 && (
-            <span className="text-sm text-primary font-semibold btk-fade-in-up">✓ Ready!</span>
+            <span className="text-sm text-primary font-semibold">✓ Ready!</span>
           )}
         </div>
       </div>

@@ -32,12 +32,12 @@ interface LoadingOverlayProps {
 export function LoadingOverlay({ message }: LoadingOverlayProps) {
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm btk-fade-in-up"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm "
       data-testid="loading-overlay"
     >
       <LoadingSpinner size="lg" />
       {message && (
-        <p className="mt-4 text-muted-foreground btk-fade-in-up">{message}</p>
+        <p className="mt-4 text-muted-foreground ">{message}</p>
       )}
     </div>
   );
@@ -50,7 +50,7 @@ interface PageLoadingProps {
 export function PageLoading({ message }: PageLoadingProps) {
   return (
     <div
-      className="flex flex-col items-center justify-center py-16 btk-fade-in-up"
+      className="flex flex-col items-center justify-center py-16 "
       data-testid="page-loading"
     >
       <LoadingSpinner size="lg" />

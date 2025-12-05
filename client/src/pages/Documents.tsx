@@ -207,7 +207,7 @@ export default function Documents() {
             return (
               <Card 
                 key={doc.id} 
-                className={`group shadow-card rounded-card border-2 ${style.border} hover:shadow-hover transition-all duration-200`}
+                className={`group shadow-card rounded-card border-2 ${style.border} hover:shadow-hover `}
                 data-testid={`card-document-${doc.id}`}
               >
                 <CardHeader className="pb-3">

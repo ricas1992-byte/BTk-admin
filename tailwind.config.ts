@@ -6,14 +6,13 @@ export default {
   theme: {
     extend: {
       borderRadius: {
-        lg: ".5625rem", /* 9px */
-        md: ".375rem", /* 6px */
-        sm: ".1875rem", /* 3px */
-        card: "1.125rem", /* 18px - Craft style */
-        button: ".875rem", /* 14px - Craft style */
+        lg: ".5625rem",
+        md: ".375rem",
+        sm: ".1875rem",
+        card: "1.125rem",
+        button: ".875rem",
       },
       colors: {
-        // Pastel colors for cards
         pastel: {
           rose: "hsl(var(--pastel-rose) / <alpha-value>)",
           blue: "hsl(var(--pastel-blue) / <alpha-value>)",
@@ -21,7 +20,6 @@ export default {
           green: "hsl(var(--pastel-green) / <alpha-value>)",
           teal: "hsl(var(--pastel-teal) / <alpha-value>)",
         },
-        // Flat / base colors (regular buttons)
         background: "hsl(var(--background) / <alpha-value>)",
         foreground: "hsl(var(--foreground) / <alpha-value>)",
         border: "hsl(var(--border) / <alpha-value>)",
@@ -93,7 +91,6 @@ export default {
         },
       },
       borderColor: {
-        // Extend border colors for pastel palette
         pastel: {
           rose: "hsl(var(--pastel-rose) / <alpha-value>)",
           blue: "hsl(var(--pastel-blue) / <alpha-value>)",
@@ -107,20 +104,6 @@ export default {
         serif: ["var(--font-serif)"],
         mono: ["var(--font-mono)"],
       },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-      },
       boxShadow: {
         'card': '0 6px 20px rgba(0,0,0,0.04)',
         'header': '0 4px 12px rgba(0,0,0,0.03)',
@@ -128,5 +111,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  plugins: [require("@tailwindcss/typography")],
 } satisfies Config;

@@ -204,7 +204,7 @@ export default function WritingStudio() {
   if (focusMode) {
     return (
       <div
-        className="focus-mode btk-fade-in-up"
+        className="focus-mode "
         data-testid="focus-mode-container"
       >
         <div className="h-full flex flex-col">
@@ -405,7 +405,7 @@ export default function WritingStudio() {
                         {tag}
                         <button
                           onClick={() => removeTag(tag)}
-                          className="hover:text-destructive transition-colors"
+                          className="hover:text-destructive "
                           data-testid={`button-remove-tag-${tag}`}
                         >
                           <X className="h-3 w-3" />

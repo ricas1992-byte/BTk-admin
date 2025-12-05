@@ -163,7 +163,7 @@ export function Layout({ children }: LayoutProps) {
               >
                 <div
                   className={`
-                    flex items-center gap-3 px-4 py-3.5 mb-1 rounded-md transition-all duration-150 cursor-pointer
+                    flex items-center gap-3 px-4 py-3.5 mb-1 rounded-md  cursor-pointer
                     touch-target
                     ${isActive(item.path) 
                       ? `bg-sidebar-accent text-sidebar-accent-foreground ${isRTL ? 'border-l-4 border-l-primary' : 'border-r-4 border-r-primary'}`
@@ -220,7 +220,7 @@ export function Layout({ children }: LayoutProps) {
       {/* Sidebar Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden btk-fade-in-up"
+          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden "
           onClick={() => setSidebarOpen(false)}
           data-testid="sidebar-overlay"
         />
@@ -260,7 +260,7 @@ export function Layout({ children }: LayoutProps) {
           <div className="flex-1 max-w-md mx-4 hidden md:block">
             <button
               onClick={() => setSearchOpen(true)}
-              className="w-full flex items-center gap-2 px-4 py-2.5 rounded-full bg-muted/50 border border-border hover:border-primary/30 hover:bg-muted transition-all duration-200 text-muted-foreground text-sm"
+              className="w-full flex items-center gap-2 px-4 py-2.5 rounded-full bg-muted/50 border border-border hover:border-primary/30 hover:bg-muted  text-muted-foreground text-sm"
               data-testid="button-global-search"
             >
               <Search className="h-4 w-4" />
@@ -333,7 +333,7 @@ export function Layout({ children }: LayoutProps) {
                     <span className="text-foreground font-medium">{crumb.label}</span>
                   ) : (
                     <Link href={crumb.path}>
-                      <span className="hover:text-foreground transition-colors cursor-pointer">
+                      <span className="hover:text-foreground  cursor-pointer">
                         {crumb.label}
                       </span>
                     </Link>
@@ -346,7 +346,7 @@ export function Layout({ children }: LayoutProps) {
 
         {/* Main Content */}
         <main className="flex-1 overflow-auto p-4 lg:p-6">
-          <div className="btk-fade-in-up">
+          <div className="">
             {children}
           </div>
         </main>
@@ -377,7 +377,7 @@ export function Layout({ children }: LayoutProps) {
                   <button
                     key={`${result.type}-${result.id}`}
                     onClick={() => handleSearchSelect(result)}
-                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors text-left"
+                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted  text-left"
                     data-testid={`search-result-${result.id}`}
                   >
                     {result.type === 'document' ? (
