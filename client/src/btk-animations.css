@@ -1,14 +1,18 @@
 /**
- * BTK Animation System - Legacy Support
- * This file provides backward compatibility for old animation classes.
- * All new animations are defined in animations.css
+ * BTK Animation System - Unified & Legacy Support
+ * Beyond the Keys - Premium Animation System
  * 
- * @see animations.css for the new unified animation system
+ * This file provides:
+ * 1. Backward compatibility for legacy animation classes
+ * 2. Additional animation utilities not in animations.css
+ * 
+ * @see animations.css for the primary animation system
  */
 
 /* ============================================================
    LEGACY CLASS ALIASES
-   Maps old class names to new animation behaviors
+   Maps old class names to new animation behaviors for backward
+   compatibility with existing components.
    ============================================================ */
 
 /* Legacy: btk-app-intro -> btk-loading-fadeout */
@@ -39,6 +43,28 @@
   transition-duration: 80ms;
 }
 
+/* Legacy: btk-shimmer -> loading shimmer effect */
+.btk-shimmer {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 0%,
+    hsl(var(--background)) 50%,
+    hsl(var(--muted)) 100%
+  );
+  background-size: 200% 100%;
+  animation: btk-shimmer-animation 1.5s ease-in-out infinite;
+}
+
+/* Legacy: btk-pulse -> subtle pulse for attention */
+.btk-pulse {
+  animation: btk-pulse-animation 2s ease-in-out infinite;
+}
+
+/* Legacy: btk-bounce -> bounce entry animation */
+.btk-bounce {
+  animation: btk-bounce-animation 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
 /* ============================================================
    LEGACY KEYFRAMES
    Required for legacy class animations
@@ -63,5 +89,185 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes btk-shimmer-animation {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes btk-pulse-animation {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes btk-bounce-animation {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ============================================================
+   ADDITIONAL UTILITY ANIMATIONS
+   Extra animations for specific UI patterns
+   ============================================================ */
+
+/* Fade in from left (for RTL support) */
+@keyframes btk-slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.btk-slide-right {
+  animation: btk-slide-right 450ms cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+/* Fade in from right (for RTL support) */
+@keyframes btk-slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.btk-slide-left {
+  animation: btk-slide-left 450ms cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+/* Scale in animation */
+@keyframes btk-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.btk-scale-in {
+  animation: btk-scale-in 300ms cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+/* Fade out animation */
+@keyframes btk-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.btk-fade-out {
+  animation: btk-fade-out 300ms cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+/* ============================================================
+   INTERACTIVE MICRO-ANIMATIONS
+   Small feedback animations for user interactions
+   ============================================================ */
+
+/* Success checkmark animation */
+@keyframes btk-check-draw {
+  0% {
+    stroke-dashoffset: 50;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.btk-check-animate {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: btk-check-draw 400ms cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+/* Ripple effect for buttons */
+@keyframes btk-ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.btk-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: currentColor;
+  animation: btk-ripple 600ms linear forwards;
+  pointer-events: none;
+}
+
+/* ============================================================
+   STAGGER ANIMATION DELAYS
+   For creating cascading entry effects on lists
+   ============================================================ */
+
+.btk-stagger-1 { animation-delay: 50ms; }
+.btk-stagger-2 { animation-delay: 100ms; }
+.btk-stagger-3 { animation-delay: 150ms; }
+.btk-stagger-4 { animation-delay: 200ms; }
+.btk-stagger-5 { animation-delay: 250ms; }
+.btk-stagger-6 { animation-delay: 300ms; }
+.btk-stagger-7 { animation-delay: 350ms; }
+.btk-stagger-8 { animation-delay: 400ms; }
+
+/* ============================================================
+   REDUCED MOTION SUPPORT
+   Respect user's motion preferences
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .btk-app-intro,
+  .btk-fade-in-up,
+  .btk-tap-scale,
+  .btk-shimmer,
+  .btk-pulse,
+  .btk-bounce,
+  .btk-slide-right,
+  .btk-slide-left,
+  .btk-scale-in,
+  .btk-fade-out,
+  .btk-check-animate,
+  .btk-ripple {
+    animation: none !important;
+    transition: none !important;
   }
 }
