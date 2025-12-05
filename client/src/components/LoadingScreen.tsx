@@ -1,7 +1,4 @@
-// UPDATED: UI enhancement - Loading screen with craft-style premium design
-// High-end loading experience with smooth transitions and professional aesthetics
 import { useState, useEffect, useCallback, memo } from 'react';
-import { Progress } from '@/components/ui/progress';
 
 interface LoadingScreenProps {
   onLoadingComplete: () => void;
@@ -16,6 +13,7 @@ const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: Loading
   const [progress, setProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);
+  const [isRemoved, setIsRemoved] = useState(false);
 
   const preloadImage = useCallback((src: string): Promise<void> => {
     return new Promise((resolve) => {
@@ -61,7 +59,7 @@ const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: Loading
         { name: 'favicon', execute: () => preloadImage('/favicon.png') },
         { name: 'fonts', execute: preloadFonts },
         { name: 'localStorage', execute: preloadLocalStorage },
-        { name: 'minDelay', execute: () => simulateMinDelay(300) },
+        { name: 'minDelay', execute: () => simulateMinDelay(400) },
       ];
 
       const totalTasks = tasks.length;
@@ -101,55 +99,66 @@ const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: Loading
     if (isComplete) {
       const fadeTimer = setTimeout(() => {
         setFadeOut(true);
-      }, 200);
+      }, 150);
 
-      const completeTimer = setTimeout(() => {
+      const removeTimer = setTimeout(() => {
+        setIsRemoved(true);
         onLoadingComplete();
-      }, 550);
+      }, 650);
 
       return () => {
         clearTimeout(fadeTimer);
-        clearTimeout(completeTimer);
+        clearTimeout(removeTimer);
       };
     }
   }, [isComplete, onLoadingComplete]);
 
+  if (isRemoved) {
+    return null;
+  }
+
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-background ${
-        fadeOut ? 'btk-app-intro' : ''
+      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center ${
+        fadeOut ? 'btk-loading-fadeout' : ''
       }`}
+      style={{ backgroundColor: '#FFFFFF' }}
       data-testid="loading-screen"
     >
-      {/* BTK Official: Loading container with btk-fade-in-up animation */}
-      <div className="flex flex-col items-center gap-8 w-full max-w-xs px-6 btk-fade-in-up">
-        {/* UPDATED: Logo with subtle hover effect and title */}
+      <div className="flex flex-col items-center gap-8 w-full max-w-xs px-6 btk-slide-up">
         <div className="flex flex-col items-center gap-4">
           <img
             src="/logo.png"
             alt="Beyond the Keys"
-            className="h-24 w-auto object-contain transition-transform hover:scale-105"
+            className="h-24 w-auto object-contain"
             data-testid="loading-logo"
           />
-          <h2 className="text-xl font-semibold tracking-tight text-foreground">
+          <h2 
+            className="text-xl font-semibold tracking-tight"
+            style={{ color: 'hsl(220, 60%, 15%)' }}
+          >
             Beyond the Keys
           </h2>
         </div>
 
-        {/* UPDATED: Progress bar with craft-style shadow and radius */}
-        <div className="w-full space-y-3">
-          <Progress
-            value={progress}
-            className="h-2.5 w-full bg-muted shadow-sm"
-            style={{
-              boxShadow: 'var(--shadow-sm)',
-              borderRadius: 'var(--radius-button)'
-            }}
-            data-testid="loading-progress-bar"
-          />
+        <div className="w-full space-y-4">
+          <div 
+            className="relative h-1.5 w-full rounded-full overflow-hidden"
+            style={{ backgroundColor: 'hsl(220, 15%, 92%)' }}
+          >
+            <div
+              className={`absolute inset-y-0 left-0 rounded-full btk-progress-bar ${progress < 100 ? 'loading' : ''}`}
+              style={{
+                width: `${progress}%`,
+                background: 'linear-gradient(90deg, hsl(220, 60%, 20%) 0%, hsl(45, 95%, 55%) 100%)'
+              }}
+              data-testid="loading-progress-bar"
+            />
+          </div>
           <div className="text-center">
             <span
-              className="text-xl font-semibold text-primary tabular-nums"
+              className="text-lg font-medium tabular-nums"
+              style={{ color: 'hsl(220, 60%, 20%)' }}
               data-testid="loading-progress-percent"
             >
               {progress}%
@@ -157,12 +166,20 @@ const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: Loading
           </div>
         </div>
 
-        {/* UPDATED: Loading status with craft-style spinner */}
-        <div className="h-6">
+        <div className="h-6 flex items-center justify-center">
           {progress < 100 && (
-            <div className="flex items-center gap-2.5">
-              <div className="spinner-craft h-4 w-4" />
-              <span className="text-sm text-muted-foreground font-medium">
+            <div className="flex items-center gap-2.5 btk-page-enter">
+              <div 
+                className="h-4 w-4 rounded-full border-2 btk-spinner"
+                style={{ 
+                  borderColor: 'hsl(220, 60%, 20%)',
+                  borderTopColor: 'hsl(45, 95%, 55%)'
+                }}
+              />
+              <span 
+                className="text-sm font-medium"
+                style={{ color: 'hsl(220, 30%, 45%)' }}
+              >
                 {progress < 20 && 'Loading assets...'}
                 {progress >= 20 && progress < 40 && 'Loading images...'}
                 {progress >= 40 && progress < 60 && 'Preparing fonts...'}
@@ -172,7 +189,12 @@ const LoadingScreen = memo(function LoadingScreen({ onLoadingComplete }: Loading
             </div>
           )}
           {progress === 100 && (
-            <span className="text-sm text-primary font-semibold btk-fade-in-up">✓ Ready!</span>
+            <span 
+              className="text-sm font-semibold btk-icon-enter"
+              style={{ color: 'hsl(45, 95%, 40%)' }}
+            >
+              Ready
+            </span>
           )}
         </div>
       </div>

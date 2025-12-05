@@ -112,55 +112,82 @@ box-shadow: 0 4px 12px rgba(0,0,0,0.03)
 padding: 12px 24px
 ```
 
-## BTK Official Animation System
+## BTK Unified Animation System
 
 ### System Overview
-The BTK system uses **ONLY THREE** official animations. No other animations are permitted.
+The BTK system uses a clean, modern, unified animation system with consistent easing and brand-aligned colors (navy for primary, gold for accents). All animations are CSS-based and defined in `/client/src/animations.css`.
 
-### 1. App Intro Animation (btk-app-intro)
-**Usage:** Loading screen fade-out only
+### Global Easing
 ```css
-/* 350ms fade-out, ease-out */
-.btk-app-intro
+--btk-easing: cubic-bezier(0.25, 0.1, 0.25, 1);
 ```
 
-### 2. Component Entry Animation (btk-fade-in-up)
-**Usage:** All components appearing on screen (tasks, cards, documents, grid items)
+### 1. Loading Screen
+**Usage:** App loading screen with white background, navy/gold progress bar
 ```css
-/* 180ms fade-in + translateY(8px), cubic-bezier(0.25, 0.1, 0.25, 1.0) */
-.btk-fade-in-up
+.btk-loading-fadeout  /* 500ms fade-out when app is ready */
+.btk-progress-bar     /* Smooth progress bar transition */
+.btk-spinner          /* Navy/gold spinning loader */
 ```
 
-### 3. Micro Interaction Animation (btk-tap-scale)
-**Usage:** onClick/onTap for buttons, icons, cards, rows, tabs
+### 2. Page Enter Animations
+**Usage:** Page and content entry animations
 ```css
-/* 120ms scale animation (1 → 0.96 → 1), ease-out, activated on :active */
-.btk-tap-scale
+.btk-page-enter       /* Fade-in (300ms) */
+.btk-slide-up         /* Slide-up + fade (450ms, translateY 20px to 0) */
+.btk-slide-up-stagger /* Staggered children animation */
+```
+
+### 3. Card Animations
+**Usage:** Card hover effects and entry
+```css
+.btk-card       /* Hover: lift 2px + soft shadow (200ms transition) */
+.btk-card-enter /* Entry animation (slide-up) */
+```
+
+### 4. Button Animations
+**Usage:** Button interactions
+```css
+.btk-button      /* Hover: scale(1.02), Active: scale(0.98) for 80ms */
+.btk-icon-button /* Icon button with scale effects */
+```
+
+### 5. Icon Animations
+**Usage:** Icon entry
+```css
+.btk-icon-enter /* Scale-in on load (250ms) */
+```
+
+### 6. Notification Animations
+**Usage:** Toast/notification entry and exit
+```css
+.btk-notification-enter /* Slide-in from bottom (300ms) */
+.btk-notification-exit  /* Fade-out on disappear (300ms) */
+```
+
+### 7. Dropdown/Modal Animations
+**Usage:** Dropdown menus and modals
+```css
+.btk-dropdown-enter /* Scale + fade (180ms) */
+.btk-dropdown-exit
+.btk-backdrop-enter /* Backdrop fade-in */
+.btk-modal-enter    /* Modal slide-down entry */
+.btk-modal-exit
 ```
 
 ### Animation Rules
-1. ✅ Use ONLY the three official animations above
-2. ❌ NO page transitions
-3. ❌ NO mount animations on App level
-4. ❌ NO custom keyframes
-5. ✅ Standard CSS transitions (hover, focus) are allowed for styling
-6. ✅ Animations defined in `/client/src/btk-animations.css`
+1. ✅ All animations are CSS-based
+2. ✅ Consistent easing: cubic-bezier(0.25, 0.1, 0.25, 1)
+3. ✅ Brand colors: navy for primary, gold for accents
+4. ✅ Animations defined in `/client/src/animations.css`
+5. ✅ No layout shifts or flicker
+6. ✅ Reduced motion support for accessibility
 
-### Button Hover (Styling, NOT Animation)
-```css
-transition: transform 150ms ease;
-:hover { transform: scale(1.02); }
-:active { transform: scale(0.98); }
-```
-
-### Card Hover (Styling, NOT Animation)
-```css
-transition: box-shadow 200ms ease, transform 150ms ease;
-:hover {
-  box-shadow: 0 8px 28px rgba(0,0,0,0.06);
-  transform: translateY(-1px);
-}
-```
+### Legacy Support
+Old animation classes are mapped to new ones for backward compatibility:
+- `.btk-app-intro` → `.btk-loading-fadeout`
+- `.btk-fade-in-up` → `.btk-slide-up`
+- `.btk-tap-scale` → Built into `.btk-button`
 
 ## iOS/Touch Optimization
 

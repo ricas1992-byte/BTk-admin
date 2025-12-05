@@ -1,9 +1,10 @@
+/* BTK Unified Animation System */
+@import './animations.css';
+@import './btk-animations.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* BTK Official Animation System - Import ONLY */
-@import './btk-animations.css';
 
 /* NAVY/GOLD/WHITE HIGH-END PREMIUM UI - LIGHT MODE */
 :root {
@@ -274,29 +275,26 @@
 }
 
 @layer components {
-  /* Craft-style primary button with BTK tap interaction */
+  /* Craft-style primary button with BTK animation system */
   .btn-craft {
-    @apply bg-primary text-primary-foreground font-medium px-5 py-2.5 transition-all duration-150 btk-tap-scale;
+    @apply bg-primary text-primary-foreground font-medium px-5 py-2.5 btk-button;
     border-radius: var(--radius-button);
   }
 
   .btn-craft:hover {
-    transform: scale(1.02);
     box-shadow: 0 4px 12px hsl(var(--primary) / 0.25);
   }
 
-  /* Craft-style card with BTK entry animation */
+  /* Craft-style card with BTK animation system */
   .card-craft {
-    @apply bg-card text-card-foreground p-5 btk-fade-in-up;
+    @apply bg-card text-card-foreground p-5 btk-card btk-card-enter;
     border-radius: var(--radius-card);
     box-shadow: var(--shadow-card);
     border: 1px solid hsl(var(--border));
-    transition: box-shadow 0.2s ease, transform 0.15s ease;
   }
 
   .card-craft:hover {
     box-shadow: 0 8px 28px rgba(0,0,0,0.06);
-    transform: translateY(-1px);
   }
 
   /* Navy/Gold card variants */
@@ -361,21 +359,21 @@
     @apply min-h-[44px];
   }
   
-  /* Icon button - Craft style with BTK tap interaction */
+  /* Icon button - Craft style with BTK animation system */
   .btn-icon-craft {
-    @apply flex items-center justify-center rounded-full transition-all duration-150 btk-tap-scale;
+    @apply flex items-center justify-center rounded-full btk-icon-button;
     width: 42px;
     height: 42px;
   }
 
   .btn-icon-craft:hover {
     @apply bg-muted;
-    transform: scale(1.05);
   }
 
-  /* Loading spinner - Pastel */
+  /* Loading spinner - Navy/Gold gradient */
   .spinner-craft {
-    @apply animate-spin rounded-full border-2 border-muted;
+    @apply rounded-full border-2 btk-spinner;
+    border-color: hsl(var(--muted));
     border-top-color: hsl(var(--primary));
   }
   

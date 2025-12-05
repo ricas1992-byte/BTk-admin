@@ -1,0 +1,424 @@
+/**
+ * BTK Unified Animation System
+ * Beyond the Keys - Premium Animation System
+ * 
+ * A clean, modern, unified animation system with consistent easing
+ * and brand-aligned colors (navy for primary, gold for accents).
+ */
+
+/* ============================================================
+   CSS VARIABLES - Animation timing and easing
+   ============================================================ */
+:root {
+  --btk-easing: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --btk-easing-fast: cubic-bezier(0.4, 0, 0.2, 1);
+  --btk-duration-fast: 80ms;
+  --btk-duration-quick: 150ms;
+  --btk-duration-normal: 200ms;
+  --btk-duration-medium: 300ms;
+  --btk-duration-slow: 450ms;
+  --btk-duration-loading: 500ms;
+}
+
+/* ============================================================
+   1. LOADING SCREEN ANIMATIONS
+   ============================================================
+   
+   - Smooth fade-out (500ms) when app is ready
+   - Used for loading screen exit only
+*/
+
+@keyframes btk-loading-fadeout {
+  from {
+    opacity: 1;
+    visibility: visible;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.btk-loading-fadeout {
+  animation: btk-loading-fadeout var(--btk-duration-loading) var(--btk-easing) forwards;
+  pointer-events: none;
+}
+
+/* Progress bar animation for loading screen */
+@keyframes btk-progress-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.btk-progress-bar {
+  transition: width var(--btk-duration-medium) var(--btk-easing);
+}
+
+.btk-progress-bar.loading {
+  animation: btk-progress-pulse 1.5s ease-in-out infinite;
+}
+
+/* ============================================================
+   2. PAGE ENTER ANIMATIONS
+   ============================================================
+   
+   - Entire page: fade-in (300-450ms)
+   - Main containers/cards: slide-up (translateY 20px to 0) + opacity
+*/
+
+@keyframes btk-page-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.btk-page-enter {
+  animation: btk-page-enter var(--btk-duration-medium) var(--btk-easing) forwards;
+}
+
+@keyframes btk-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.btk-slide-up {
+  animation: btk-slide-up var(--btk-duration-slow) var(--btk-easing) forwards;
+}
+
+/* Staggered children animation support */
+.btk-slide-up-stagger > * {
+  opacity: 0;
+  animation: btk-slide-up var(--btk-duration-slow) var(--btk-easing) forwards;
+}
+
+.btk-slide-up-stagger > *:nth-child(1) { animation-delay: 0ms; }
+.btk-slide-up-stagger > *:nth-child(2) { animation-delay: 50ms; }
+.btk-slide-up-stagger > *:nth-child(3) { animation-delay: 100ms; }
+.btk-slide-up-stagger > *:nth-child(4) { animation-delay: 150ms; }
+.btk-slide-up-stagger > *:nth-child(5) { animation-delay: 200ms; }
+.btk-slide-up-stagger > *:nth-child(6) { animation-delay: 250ms; }
+
+/* ============================================================
+   3. CARD ANIMATIONS
+   ============================================================
+   
+   - Hover: lift by 2px + soft shadow
+   - Smooth transitions (200ms)
+*/
+
+.btk-card {
+  transition: 
+    transform var(--btk-duration-normal) var(--btk-easing),
+    box-shadow var(--btk-duration-normal) var(--btk-easing);
+}
+
+.btk-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 25px -5px rgba(0, 0, 0, 0.08),
+    0 4px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Card entry animation */
+.btk-card-enter {
+  animation: btk-slide-up var(--btk-duration-slow) var(--btk-easing) forwards;
+}
+
+/* ============================================================
+   4. BUTTON ANIMATIONS
+   ============================================================
+   
+   - Hover: scale(1.02) or slight color brighten
+   - Active: quick scale(0.98) for 80ms
+*/
+
+.btk-button {
+  transition: 
+    transform var(--btk-duration-quick) var(--btk-easing),
+    box-shadow var(--btk-duration-quick) var(--btk-easing),
+    background-color var(--btk-duration-quick) var(--btk-easing);
+}
+
+.btk-button:hover {
+  transform: scale(1.02);
+}
+
+.btk-button:active {
+  transform: scale(0.98);
+  transition-duration: var(--btk-duration-fast);
+}
+
+/* Icon button specific */
+.btk-icon-button {
+  transition: 
+    transform var(--btk-duration-quick) var(--btk-easing),
+    background-color var(--btk-duration-quick) var(--btk-easing);
+}
+
+.btk-icon-button:hover {
+  transform: scale(1.05);
+}
+
+.btk-icon-button:active {
+  transform: scale(0.95);
+  transition-duration: var(--btk-duration-fast);
+}
+
+/* ============================================================
+   5. ICON ANIMATIONS
+   ============================================================
+   
+   - Scale-in on load (250ms)
+*/
+
+@keyframes btk-icon-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.btk-icon-enter {
+  animation: btk-icon-scale-in 250ms var(--btk-easing) forwards;
+}
+
+/* ============================================================
+   6. NOTIFICATION ANIMATIONS
+   ============================================================
+   
+   - Slide-in from bottom
+   - Fade-out on disappear
+   - Duration: 300ms
+*/
+
+@keyframes btk-notification-enter {
+  from {
+    opacity: 0;
+    transform: translateY(100%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes btk-notification-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+}
+
+.btk-notification-enter {
+  animation: btk-notification-enter var(--btk-duration-medium) var(--btk-easing) forwards;
+}
+
+.btk-notification-exit {
+  animation: btk-notification-exit var(--btk-duration-medium) var(--btk-easing) forwards;
+}
+
+/* ============================================================
+   7. DROPDOWN MENU ANIMATIONS
+   ============================================================
+   
+   - Scale + fade (180ms)
+*/
+
+@keyframes btk-dropdown-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes btk-dropdown-exit {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95) translateY(-4px);
+  }
+}
+
+.btk-dropdown-enter {
+  animation: btk-dropdown-enter 180ms var(--btk-easing) forwards;
+}
+
+.btk-dropdown-exit {
+  animation: btk-dropdown-exit 180ms var(--btk-easing) forwards;
+}
+
+/* ============================================================
+   8. MODAL ANIMATIONS
+   ============================================================
+   
+   - Backdrop fade-in
+   - Modal slide-down subtle entry
+*/
+
+@keyframes btk-backdrop-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes btk-backdrop-exit {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.btk-backdrop-enter {
+  animation: btk-backdrop-enter var(--btk-duration-medium) var(--btk-easing) forwards;
+}
+
+.btk-backdrop-exit {
+  animation: btk-backdrop-exit var(--btk-duration-normal) var(--btk-easing) forwards;
+}
+
+@keyframes btk-modal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes btk-modal-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+.btk-modal-enter {
+  animation: btk-modal-enter var(--btk-duration-medium) var(--btk-easing) forwards;
+}
+
+.btk-modal-exit {
+  animation: btk-modal-exit var(--btk-duration-normal) var(--btk-easing) forwards;
+}
+
+/* ============================================================
+   9. SIDEBAR ANIMATIONS
+   ============================================================
+   
+   - Smooth slide transitions for mobile sidebar
+*/
+
+.btk-sidebar {
+  transition: transform var(--btk-duration-medium) var(--btk-easing);
+}
+
+.btk-sidebar-overlay {
+  transition: opacity var(--btk-duration-medium) var(--btk-easing);
+}
+
+/* ============================================================
+   10. LOADING SPINNER
+   ============================================================
+   
+   - Smooth spin animation
+*/
+
+@keyframes btk-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btk-spinner {
+  animation: btk-spin 1s linear infinite;
+}
+
+/* ============================================================
+   11. UTILITY CLASSES
+   ============================================================
+   
+   - Quick animation helpers
+*/
+
+/* Fade transitions */
+.btk-fade {
+  transition: opacity var(--btk-duration-normal) var(--btk-easing);
+}
+
+.btk-fade-fast {
+  transition: opacity var(--btk-duration-quick) var(--btk-easing);
+}
+
+/* Scale transitions */
+.btk-scale {
+  transition: transform var(--btk-duration-normal) var(--btk-easing);
+}
+
+.btk-scale-fast {
+  transition: transform var(--btk-duration-quick) var(--btk-easing);
+}
+
+/* Combined transitions */
+.btk-transition {
+  transition: 
+    opacity var(--btk-duration-normal) var(--btk-easing),
+    transform var(--btk-duration-normal) var(--btk-easing);
+}
+
+.btk-transition-fast {
+  transition: 
+    opacity var(--btk-duration-quick) var(--btk-easing),
+    transform var(--btk-duration-quick) var(--btk-easing);
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
