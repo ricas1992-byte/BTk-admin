@@ -18,27 +18,34 @@ A comprehensive multilingual management platform for documents, writing, learnin
 6. **Global Search** - Search across documents and courses from header
 7. **Breadcrumb Navigation** - Easy navigation context on all pages
 
-## Design System - C2 Craft High-End Premium Pastel
+## Design System - BTK Navy/Gold/White Premium UI
 
 ### Color Palette
 ```css
-/* Primary Accent */
---accent: #5AB1A7 (Craft Teal)
---accent-light: #E0F4F2
+/* Navy Primary (Sidebar, dark accents) */
+--sidebar: hsl(220, 60%, 20%)
+--navy-medium: hsl(220, 55%, 65%)
+--navy-light: hsl(220, 50%, 92%)
+
+/* Gold Primary (Buttons, highlights) */
+--primary: hsl(45, 95%, 55%)
+--gold-light: hsl(45, 85%, 88%)
+--gold-accent: hsl(45, 90%, 70%)
+
+/* White Backgrounds */
+--background: #FFFFFF
+--card: #FFFFFF
+--white-soft: hsl(0, 0%, 98%)
 
 /* Pastel Cards */
---pastel-rose: #FAD4D4
---pastel-blue: #D7E9FF
---pastel-beige: #F4EBD0
---pastel-green: #DFF5E1
-
-/* Backgrounds */
---bg: #FFFFFF
---bg-soft: #FAF8F6 (Sidebar)
+--pastel-teal: Light gold accent
+--pastel-blue: Navy light
+--pastel-rose: Gold light
+--pastel-green: White soft
 
 /* Text */
---text-main: #273043
---text-soft: #69707D
+--foreground: hsl(220, 60%, 15%)
+--muted-foreground: hsl(220, 30%, 45%)
 ```
 
 ### Typography
@@ -134,22 +141,58 @@ Add these environment variables for cloud sync:
 - `VITE_FIREBASE_MESSAGING_SENDER_ID`
 - `VITE_FIREBASE_APP_ID`
 
+## BTK Unified Animation System
+
+### Animation Files
+- `animations.css` - Primary unified animation system
+- `btk-animations.css` - Legacy support and additional utilities
+
+### Animation Classes
+```css
+/* Loading Screen */
+.btk-loading-fadeout  /* 500ms fade-out when app ready */
+.btk-progress-bar     /* Smooth progress bar transition */
+.btk-spinner          /* Navy/gold spinning loader */
+
+/* Page Transitions */
+.btk-page-enter       /* Fade-in (300ms) */
+.btk-slide-up         /* Slide-up + fade (450ms) */
+.btk-slide-up-stagger /* Staggered children animation */
+
+/* Card Animations */
+.btk-card             /* Hover: lift 2px + soft shadow */
+.btk-card-enter       /* Entry animation (slide-up) */
+
+/* Button Animations */
+.btk-button           /* Hover: scale(1.02), Active: scale(0.98) */
+.btk-icon-button      /* Icon button with scale effects */
+
+/* Modal/Dropdown */
+.btk-dropdown-enter   /* Scale + fade (180ms) */
+.btk-backdrop-enter   /* Backdrop fade-in */
+.btk-modal-enter      /* Modal slide-down entry */
+```
+
+### Global Easing
+```css
+--btk-easing: cubic-bezier(0.25, 0.1, 0.25, 1);
+```
+
 ## Recent Changes
+- **BTK V1 UI + Animation System**:
+  - Implemented unified BTK Animation System in animations.css
+  - Added legacy support in btk-animations.css for backward compatibility
+  - Navy/Gold/White premium color scheme
+  - Loading screen with navy-gold gradient progress bar
+  - Smooth page transitions and card hover effects
+  - Reduced motion support for accessibility
 - **Performance Optimizations**:
   - Implemented Code Splitting with React.lazy for all page components
   - Added Suspense with loading fallback for smooth page transitions
   - Applied React.memo and useCallback optimizations
-  - Removed console.log statements from production code
 - **Loading Screen**:
-  - Created professional LoadingScreen component with logo, progress bar, and percentage display
-  - Preloads fonts, images, and localStorage data during initial load
-  - Smooth 400ms fade-out transition when loading completes
-- Implemented C2 Craft High-End Premium Pastel UI design
-- Added Focus Mode to Writing Studio
-- Added Global Search in header
-- Added Breadcrumb navigation
-- Updated all pages with pastel card colors
-- Enhanced iOS touch targets and button sizes
-- Added micro-animations and transitions
+  - Professional LoadingScreen with logo, progress bar, and percentage
+  - Preloads fonts, images, and localStorage data
+  - Smooth 500ms fade-out transition
 - Full 6-language support with RTL/LTR handling
 - Firebase-ready architecture for cross-device sync
