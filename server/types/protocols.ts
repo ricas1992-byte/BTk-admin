@@ -1,4 +1,5 @@
 export type ProtocolStatus = "not_started" | "in_progress" | "completed";
+export type DesignStatus = "draft" | "in_progress" | "approved";
 
 export interface Protocol {
   id: number;
@@ -8,6 +9,10 @@ export interface Protocol {
   last_session: string | null; // ISO date string
   notes: string;
   next_focus: string;
+  // Admin fields
+  design_status: DesignStatus;
+  is_active_for_practice: boolean;
+  admin_notes: string;
 }
 
 export interface ProtocolSession {
@@ -45,4 +50,19 @@ export interface UpdateProtocolStatusRequest {
   progress?: number;
   notes?: string;
   next_focus?: string;
+}
+
+export interface UpdateProtocolMetaRequest {
+  name?: string;
+  design_status?: DesignStatus;
+  is_active_for_practice?: boolean;
+  admin_notes?: string;
+}
+
+export interface BasicSessionRequest {
+  date: string; // YYYY-MM-DD
+  piece_title: string;
+  duration_minutes: number;
+  notes: string;
+  status_after_session: ProtocolStatus;
 }

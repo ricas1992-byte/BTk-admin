@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -9,7 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, TrendingUp, Circle, Clock, CheckCircle2 } from "lucide-react";
+import { Search, TrendingUp, Circle, Clock, CheckCircle2, Settings } from "lucide-react";
+import { Link } from "wouter";
 import { ProtocolCard } from "./ProtocolCard";
 import { SessionLogModal } from "./SessionLogModal";
 import { SessionHistoryDrawer } from "./SessionHistoryDrawer";
@@ -52,8 +54,15 @@ export default function ProtocolTrackerPage() {
     }
   };
 
+  // Filter only approved and active protocols
+  const activeProtocols = useMemo(() => {
+    return protocols.filter(
+      (p) => p.design_status === "approved" && p.is_active_for_practice
+    );
+  }, [protocols]);
+
   const filteredProtocols = useMemo(() => {
-    return protocols.filter((protocol) => {
+    return activeProtocols.filter((protocol) => {
       const matchesSearch = protocol.name
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
@@ -61,7 +70,7 @@ export default function ProtocolTrackerPage() {
         statusFilter === "all" || protocol.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
-  }, [protocols, searchQuery, statusFilter]);
+  }, [activeProtocols, searchQuery, statusFilter]);
 
   const handleOpenSession = (protocol: Protocol) => {
     setSelectedProtocol(protocol);
@@ -91,17 +100,48 @@ export default function ProtocolTrackerPage() {
   return (
     <div className="space-y-6" dir="rtl">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-right">
-          מעקב פרוטוקולי אימון
-        </h1>
-        <p className="text-muted-foreground mt-1 text-right">
-          עקוב אחר יישום 20 פרוטוקולי ה-SOP באימוני הפסנתר
-        </p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight text-right">
+            מעקב פרוטוקולי אימון
+          </h1>
+          <p className="text-muted-foreground mt-1 text-right">
+            עקוב אחר יישום 20 פרוטוקולי ה-SOP באימוני הפסנתר
+          </p>
+        </div>
+        <Link href="/protocols/admin">
+          <Button variant="outline" size="sm">
+            <Settings className="ml-2 h-4 w-4" />
+            ניהול פרוטוקולים
+          </Button>
+        </Link>
       </div>
 
+      {/* No Active Protocols Warning */}
+      {summary && summary.total === 0 && (
+        <Card className="bg-yellow-50 border-yellow-200 shadow-card rounded-card">
+          <CardContent className="py-6">
+            <div className="text-center">
+              <Settings className="h-12 w-12 text-yellow-600 mx-auto mb-3" />
+              <h3 className="text-lg font-semibold text-yellow-900 mb-2">
+                עדיין לא הופעלו פרוטוקולים לאימון
+              </h3>
+              <p className="text-yellow-800 mb-4">
+                אפשר להגדיר אותם במסך ניהול הפרוטוקולים
+              </p>
+              <Link href="/protocols/admin">
+                <Button>
+                  <Settings className="ml-2 h-4 w-4" />
+                  הגדר פרוטוקולים לאימון
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Summary Cards */}
-      {summary && (
+      {summary && summary.total > 0 && (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Card className="bg-pastel-teal border-pastel-teal shadow-card rounded-card">
             <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">

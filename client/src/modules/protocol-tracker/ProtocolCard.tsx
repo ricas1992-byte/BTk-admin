@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { PlayCircle, History, CheckCircle2, Clock, Circle } from "lucide-react";
+import { useLocation } from "wouter";
 import type { Protocol } from "./types";
 
 interface ProtocolCardProps {
@@ -33,9 +34,22 @@ export function ProtocolCard({ protocol, onOpenSession, onViewHistory }: Protoco
   const config = statusConfig[protocol.status];
   const StatusIcon = config.icon;
   const progressPercent = Math.round(protocol.progress * 100);
+  const [, setLocation] = useLocation();
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Don't navigate if clicking on buttons
+    const target = e.target as HTMLElement;
+    if (target.closest("button")) {
+      return;
+    }
+    setLocation(`/protocols/${protocol.id}`);
+  };
 
   return (
-    <Card className="shadow-card rounded-card hover:shadow-lg transition-shadow duration-200">
+    <Card
+      className="shadow-card rounded-card hover:shadow-lg transition-shadow duration-200 cursor-pointer"
+      onClick={handleCardClick}
+    >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-2">
           <CardTitle className="text-base font-semibold text-right flex-1">

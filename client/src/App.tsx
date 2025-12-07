@@ -17,6 +17,8 @@ const LearningHub = lazy(() => import("@/pages/LearningHub"));
 const Tasks = lazy(() => import("@/pages/Tasks"));
 const Settings = lazy(() => import("@/pages/Settings"));
 const ProtocolTracker = lazy(() => import("@/modules/protocol-tracker/ProtocolTrackerPage"));
+const ProtocolsAdmin = lazy(() => import("@/modules/protocol-tracker/ProtocolsAdminPage"));
+const ProtocolDetail = lazy(() => import("@/modules/protocol-tracker/ProtocolDetailPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const PageFallback = memo(function PageFallback() {
@@ -38,6 +40,8 @@ const Router = memo(function Router() {
         <Route path="/learning" component={LearningHub} />
         <Route path="/tasks" component={Tasks} />
         <Route path="/protocols" component={ProtocolTracker} />
+        <Route path="/protocols/admin" component={ProtocolsAdmin} />
+        <Route path="/protocols/:id" component={ProtocolDetail} />
         <Route path="/settings" component={Settings} />
         <Route component={NotFound} />
       </Switch>
