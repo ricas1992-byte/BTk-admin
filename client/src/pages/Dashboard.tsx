@@ -3,21 +3,23 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { 
-  FileText, 
-  BookOpen, 
-  CheckCircle2, 
-  Clock, 
+import {
+  FileText,
+  BookOpen,
+  CheckCircle2,
+  Clock,
   AlertCircle,
   Plus,
   Pencil,
   TrendingUp,
   Calendar,
   ArrowRight,
-  Flag
+  Flag,
+  ListChecks,
+  Circle
 } from 'lucide-react';
 import { Link } from 'wouter';
-import { useMemo } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 
 function TaskItem({ task }: { task: Task }) {
   const { t, updateTask } = useApp();
@@ -70,8 +72,33 @@ function TaskItem({ task }: { task: Task }) {
   );
 }
 
+interface ProtocolSummary {
+  total: number;
+  not_started: number;
+  in_progress: number;
+  completed: number;
+  average_progress: number;
+}
+
 export default function Dashboard() {
   const { t, documents, courses, tasks, learningProgress } = useApp();
+  const [protocolSummary, setProtocolSummary] = useState<ProtocolSummary | null>(null);
+
+  useEffect(() => {
+    fetchProtocolSummary();
+  }, []);
+
+  const fetchProtocolSummary = async () => {
+    try {
+      const response = await fetch('/api/protocols/summary');
+      if (response.ok) {
+        const data = await response.json();
+        setProtocolSummary(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch protocol summary:', error);
+    }
+  };
 
   const todayTasks = useMemo(() => tasks.filter(task => {
     if (task.status === 'DONE') return false;
@@ -395,6 +422,69 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Protocol Tracker Summary */}
+      {protocolSummary && (
+        <Card className="shadow-card rounded-card" data-testid="card-protocol-summary">
+          <CardHeader className="flex flex-row items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-lg">מעקב פרוטוקולי אימון</CardTitle>
+              <Badge variant="secondary" className="rounded-full px-3">
+                {protocolSummary.total} פרוטוקולים
+              </Badge>
+            </div>
+            <Link href="/protocols">
+              <Button variant="ghost" size="sm" className="touch-target">
+                צפה בכל הפרוטוקולים
+                <ArrowRight className="h-4 w-4 ms-1" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 sm:grid-cols-4">
+              <div className="flex items-center gap-4 p-4 rounded-card bg-pastel-teal touch-target">
+                <div className="p-3 rounded-full bg-background/60">
+                  <ListChecks className="h-6 w-6 text-primary" strokeWidth={1.75} />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold">{protocolSummary.total}</p>
+                  <p className="text-sm text-foreground/70">סה"כ</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 p-4 rounded-card bg-pastel-beige touch-target">
+                <div className="p-3 rounded-full bg-background/60">
+                  <Circle className="h-6 w-6 text-primary" strokeWidth={1.75} />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold">{protocolSummary.not_started}</p>
+                  <p className="text-sm text-foreground/70">לא התחיל</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 p-4 rounded-card bg-pastel-blue touch-target">
+                <div className="p-3 rounded-full bg-background/60">
+                  <Clock className="h-6 w-6 text-primary" strokeWidth={1.75} />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold">{protocolSummary.in_progress}</p>
+                  <p className="text-sm text-foreground/70">בתהליך</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 p-4 rounded-card bg-pastel-green touch-target">
+                <div className="p-3 rounded-full bg-background/60">
+                  <CheckCircle2 className="h-6 w-6 text-primary" strokeWidth={1.75} />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold">{protocolSummary.completed}</p>
+                  <p className="text-sm text-foreground/70">הושלם</p>
+                  <p className="text-xs text-foreground/60 mt-0.5">
+                    {Math.round(protocolSummary.average_progress * 100)}% ממוצע
+                  </p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
