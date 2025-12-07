@@ -1,12 +1,16 @@
 import { Router } from "express";
 import { promises as fs } from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 import { randomUUID } from "crypto";
 import type {
   Protocol,
   ProtocolSession,
   CreateSessionRequest,
 } from "../types/protocols";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const router = Router();
 const sessionsPath = path.join(__dirname, "../data/protocol_sessions.json");
