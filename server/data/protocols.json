@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "name": "חימום אצבעות וכף היד",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 2,
+    "name": "תרגילי סולמות מז'וריים",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 3,
+    "name": "תרגילי סולמות מינוריים",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 4,
+    "name": "תרגילי ארפג'יו",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 5,
+    "name": "תרגילי חאנון",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 6,
+    "name": "תרגילי דינמיקה",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 7,
+    "name": "תרגול קצב ומטרונום",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 8,
+    "name": "תרגול קריאת תווים",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 9,
+    "name": "תרגילי טכניקת יד שמאל",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 10,
+    "name": "תרגילי טכניקת יד ימין",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 11,
+    "name": "תרגילי קואורדינציה בין הידיים",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 12,
+    "name": "תרגילי סטקאטו ולגאטו",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 13,
+    "name": "תרגילי פדאל",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 14,
+    "name": "תרגול ביצוע איטי",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 15,
+    "name": "תרגול בחלקים קטנים",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 16,
+    "name": "חזרה על קטעים קשים",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 17,
+    "name": "תרגילי ביטוי מוזיקלי",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 18,
+    "name": "תרגילי זיכרון",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 19,
+    "name": "תרגול נפשי (ללא פסנתר)",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  },
+  {
+    "id": 20,
+    "name": "הקלטה והאזנה עצמית",
+    "status": "not_started",
+    "progress": 0,
+    "last_session": null,
+    "notes": "",
+    "next_focus": ""
+  }
+]

@@ -3,18 +3,19 @@ import { Link, useLocation } from 'wouter';
 import { useApp } from '@/context/AppContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { 
-  LayoutDashboard, 
-  FileText, 
-  Pencil, 
-  BookOpen, 
-  Globe, 
+import {
+  LayoutDashboard,
+  FileText,
+  Pencil,
+  BookOpen,
+  Globe,
   Menu,
   X,
   Settings,
   Search,
   ChevronRight,
-  CheckSquare
+  CheckSquare,
+  ListChecks
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -53,6 +54,7 @@ export function Layout({ children }: LayoutProps) {
     { path: '/writing', label: t('nav.writing'), icon: Pencil },
     { path: '/learning', label: t('nav.learning'), icon: BookOpen },
     { path: '/tasks', label: t('tasks.title'), icon: CheckSquare },
+    { path: '/protocols', label: 'מעקב פרוטוקולים', icon: ListChecks },
     { path: '/settings', label: t('nav.settings'), icon: Settings },
   ];
 
