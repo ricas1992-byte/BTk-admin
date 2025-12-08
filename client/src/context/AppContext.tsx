@@ -1110,29 +1110,6 @@ const translations: Record<Language, Record<string, string>> = {
   },
 };
 
-// Webhook function to send events to Make
-async function sendWebhook(payload: {
-  event: string;
-  taskId: string;
-  title: string;
-  status: string;
-  createdAt: string | null;
-  updatedAt: string | null;
-  extra: Record<string, unknown>;
-}) {
-  try {
-    await fetch("https://hook.eu1.make.com/67h1d8gyj3pxhehqde5ud5tq40iiw0sn", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
-  } catch (e) {
-    console.error("Webhook error:", e);
-  }
-}
-
 const AppContext = createContext<AppContextType | null>(null);
 
 function generateId(): string {
@@ -1400,107 +1377,25 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setTasks(prev => [...prev, newTask]);
     syncItemToFirestore('tasks', newTask);
 
-    // Send webhook for task creation
-    sendWebhook({
-      event: "task_created",
-      taskId: newTask.id,
-      title: newTask.title,
-      status: newTask.status,
-      createdAt: newTask.createdAt || null,
-      updatedAt: newTask.updatedAt || null,
-      extra: {
-        description: newTask.description || null,
-        type: newTask.type,
-        category: newTask.category || null,
-        priority: newTask.priority,
-        dueDate: newTask.dueDate || null,
-        tags: newTask.tags || null,
-      }
-    });
-
     return newTask;
   }, []);
 
   const updateTask = useCallback((id: string, updates: Partial<Omit<Task, 'id' | 'createdAt'>>) => {
-    let originalTask: Task | undefined;
-    let updatedTask: Task | undefined;
-
     setTasks(prev => {
-      originalTask = prev.find(t => t.id === id);
       const updated = prev.map(task =>
         task.id === id ? { ...task, ...updates, updatedAt: new Date().toISOString() } : task
       );
-      updatedTask = updated.find(t => t.id === id);
+      const updatedTask = updated.find(t => t.id === id);
       if (updatedTask) {
         syncItemToFirestore('tasks', updatedTask);
       }
       return updated;
     });
-
-    // Send webhook after state update
-    if (updatedTask && originalTask) {
-      const statusChanged = updates.status && updates.status !== originalTask.status;
-
-      let event = "task_updated";
-      if (statusChanged) {
-        if (updates.status === 'OPEN') {
-          event = "task_opened";
-        } else if (updates.status === 'DONE') {
-          event = "task_closed";
-        } else {
-          event = "status_updated";
-        }
-      }
-
-      sendWebhook({
-        event,
-        taskId: updatedTask.id,
-        title: updatedTask.title,
-        status: updatedTask.status,
-        createdAt: updatedTask.createdAt || null,
-        updatedAt: updatedTask.updatedAt || null,
-        extra: {
-          description: updatedTask.description || null,
-          type: updatedTask.type,
-          category: updatedTask.category || null,
-          priority: updatedTask.priority,
-          dueDate: updatedTask.dueDate || null,
-          tags: updatedTask.tags || null,
-          previousStatus: statusChanged ? originalTask.status : null,
-        }
-      });
-    }
   }, []);
 
   const deleteTask = useCallback((id: string) => {
-    let deletedTask: Task | undefined;
-
-    setTasks(prev => {
-      deletedTask = prev.find(t => t.id === id);
-      return prev.filter(task => task.id !== id);
-    });
-
+    setTasks(prev => prev.filter(task => task.id !== id));
     deleteFromFirestore('tasks', id);
-
-    // Send webhook for task deletion
-    if (deletedTask) {
-      sendWebhook({
-        event: "task_deleted",
-        taskId: deletedTask.id,
-        title: deletedTask.title,
-        status: deletedTask.status,
-        createdAt: deletedTask.createdAt || null,
-        updatedAt: deletedTask.updatedAt || null,
-        extra: {
-          description: deletedTask.description || null,
-          type: deletedTask.type,
-          category: deletedTask.category || null,
-          priority: deletedTask.priority,
-          dueDate: deletedTask.dueDate || null,
-          tags: deletedTask.tags || null,
-        }
-      });
-    }
   }, []);
 
   const updateLearningProgress = useCallback((courseId: string, completedUnits: string[]) => {
