@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { promises as fs } from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 import { randomUUID } from "crypto";
 import type {
   Protocol,
@@ -9,12 +8,9 @@ import type {
   CreateSessionRequest,
 } from "../types/protocols";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const router = Router();
-const sessionsPath = path.join(__dirname, "../data/protocol_sessions.json");
-const protocolsPath = path.join(__dirname, "../data/protocols.json");
+const sessionsPath = path.join(process.cwd(), "server/data/protocol_sessions.json");
+const protocolsPath = path.join(process.cwd(), "server/data/protocols.json");
 
 // Helper functions
 async function readSessions(): Promise<ProtocolSession[]> {
